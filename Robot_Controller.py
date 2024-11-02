@@ -1,53 +1,72 @@
+import URBasic
 import time
 import math
-import threading
-import URBasic
-from Breathing_Motion_Controller import HoverAndBreatheCommand, BreathingMotionController
-from Move_Robot import MoveToPositionCommand, WaitCommand
+from Move_Robot import MoveToPositionCommand, HoverAndBreatheCommand
+from Breathing_Motion_Controller import BreathingMotionController
 
-# Robot Controller with Command Queue
-class RobotController:
-    def __init__(self, robot, breathing_controller):
-        self.robot = robot
-        self.breathing_controller = breathing_controller
-        self.command_queue = []
-        self.current_command = None
-        self.running = True
-        threading.Thread(target=self.run, daemon=True).start()
-
-    def add_command(self, command):
-        self.command_queue.append(command)
-
-    def run(self):
-        while self.running:
-            if self.command_queue:
-                self.breathing_controller.stop_breathing()  # Stop breathing before executing a new command
-                self.current_command = self.command_queue.pop(0)
-                self.current_command.execute()
-            else:
-                if not self.breathing_controller.breathing:
-                    # Start breathing if there are no commands and it's not already breathing
-                    self.breathing_controller.start_breathing()
-            time.sleep(0.1)  # Avoid tight loop
-
-    def stop(self):
-        self.running = False
-
-# Main Program
 def main():
-    # Initialize Robot Model and Controller
+    # Initialize robot
     robotModel = URBasic.robotModel.RobotModel()
     robot = URBasic.urScriptExt.UrScriptExt(host='192.168.31.224', robotModel=robotModel)
-    
-    breathing_controller = BreathingMotionController(robot)
-    robot_controller = RobotController(robot, breathing_controller)
+    robot.reset_error()
+    print("Robot initialized")
 
-    # Example Usage
-    target_position = (math.radians(125.30), math.radians(-136), math.radians(-95), math.radians(-38), math.radians(90), math.radians(315))
-    robot_controller.add_command(MoveToPositionCommand(robot, target_position))
-    robot_controller.add_command(WaitCommand(3))
-    robot_controller.add_command(HoverAndBreatheCommand(robot, breathing_controller))
+    # Define positions
+    initial_position = (
+        math.radians(0), math.radians(-90), math.radians(0), 
+        math.radians(-90), math.radians(0), math.radians(0)
+    )
+    hover_position = (
+        math.radians(0), math.radians(-120), math.radians(-50), 
+        math.radians(-115), math.radians(90), math.radians(0)
+    )
+    target_position = (
+        math.radians(45), math.radians(-120), math.radians(-52), 
+        math.radians(-114), math.radians(90), math.radians(0)
+    )
+
+    # Initialize breathing controller
+    breathing_controller = BreathingMotionController(robot)
+    
+    # Move to initial position
+    print("Moving to initial position...")
+    robot.movej(q=initial_position, a=0.2, v=0.2)
+    time.sleep(1)  # Allow some time for the command to initiate
+
+    # Move to hover position and start breathing
+    print("Moving to hover position...")
+    hover_command = MoveToPositionCommand(robot, hover_position)
+    hover_command.execute()
+    while not hover_command.is_reached():
+        print("Moving towards hover position...")
+        time.sleep(0.5)
+    print("Hover position reached. Starting breathing motion.")
+    breathing_controller.start_breathing()
+
+    # Wait for 3 seconds at the hover position
+    time.sleep(3)
+
+    # Move to target position and stop breathing
+    print("Moving to target position...")
+    breathing_controller.stop_breathing()
+    target_command = MoveToPositionCommand(robot, target_position)
+    target_command.execute()
+    while not target_command.is_reached():
+        print("Moving towards target position...")
+        time.sleep(0.5)
+    print("Target position reached.")
+
+    # Wait for 3 seconds at the target position
+    time.sleep(3)
+
+    # Return to hover position and resume breathing
+    print("Returning to hover position...")
+    hover_command.execute()
+    while not hover_command.is_reached():
+        print("Returning to hover position...")
+        time.sleep(0.5)
+    print("Hover position reached. Resuming breathing motion.")
+    breathing_controller.start_breathing()
 
 if __name__ == "__main__":
     main()
-

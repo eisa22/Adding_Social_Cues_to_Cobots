@@ -1,22 +1,7 @@
-import URBasic
-import math
-import time
-import math3d as m3d
 import threading
-from Move_Robot import RobotCommand
+import time
+import math
 
-class HoverAndBreatheCommand(RobotCommand):
-    def __init__(self, robot, breathing_controller):
-        self.robot = robot
-        self.breathing_controller = breathing_controller
-
-    def execute(self):
-        print("Returning to hover position and starting breathing motion")
-        hover_position = (math.radians(0), math.radians(-90), math.radians(-90), math.radians(-90), math.radians(90), math.radians(0))
-        self.robot.movej(q=hover_position, a=0.1, v=0.1)
-        self.breathing_controller.start_breathing()
-
-# Breathing Motion Controller
 class BreathingMotionController:
     def __init__(self, robot):
         self.robot = robot
