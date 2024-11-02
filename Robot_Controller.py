@@ -30,8 +30,16 @@ def main():
     
     # Move to initial position
     print("Moving to initial position...")
-    robot.movej(q=initial_position, a=0.2, v=0.2)
-    time.sleep(1)  # Allow some time for the command to initiate
+    breathing_controller.stop_breathing()
+    initial_command = MoveToPositionCommand(robot, initial_position)
+    initial_command.execute()
+    while not initial_command.is_reached():
+        print("Moving towards initial position...")
+        time.sleep(0.5)
+    print("Initial position reached.")
+    time.sleep(1)
+
+
 
     # Move to hover position and start breathing
     print("Moving to hover position...")
