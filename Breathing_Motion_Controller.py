@@ -1,10 +1,7 @@
-import URBasic
-import math
-import time
-import math3d as m3d
 import threading
+import time
+import math
 
-# Breathing Motion Controller
 class BreathingMotionController:
     def __init__(self, robot):
         self.robot = robot
