@@ -8,7 +8,7 @@ from Gripper_Control import ControlGripper
 def main():
     # Initialize robot
     robotModel = URBasic.robotModel.RobotModel()
-    robot = URBasic.urScriptExt.UrScriptExt(host='192.168.31.224', robotModel=robotModel)
+    robot = URBasic.urScriptExt.UrScriptExt(host='192.168.0.13', robotModel=robotModel)
     robot.reset_error()
     print("Robot initialized")
 
