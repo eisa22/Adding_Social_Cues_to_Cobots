@@ -3,6 +3,7 @@ import time
 import math
 from Move_Robot import MoveToPositionCommand, HoverAndBreatheCommand
 from Breathing_Motion_Controller import BreathingMotionController
+from Gripper_Control import ControlGripper
 
 def main():
     # Initialize robot
@@ -27,6 +28,9 @@ def main():
 
     # Initialize breathing controller
     breathing_controller = BreathingMotionController(robot)
+
+    # Initialize gripper controller
+    gripper = ControlGripper(robot)  
     
     # Move to initial position
     print("Moving to initial position...")
@@ -50,6 +54,8 @@ def main():
         time.sleep(0.5)
     print("Hover position reached. Starting breathing motion.")
     breathing_controller.start_breathing()
+    # Close gripper
+    gripper.close_gripper()
 
     # Wait for 3 seconds at the hover position
     time.sleep(3)
@@ -62,10 +68,15 @@ def main():
     while not target_command.is_reached():
         print("Moving towards target position...")
         time.sleep(0.5)
+    # Open gripper
+    gripper.open_gripper()
     print("Target position reached.")
 
     # Wait for 3 seconds at the target position
     time.sleep(3)
+
+    # Close gripper
+    gripper.close_gripper()
 
     # Return to hover position and resume breathing
     print("Returning to hover position...")
