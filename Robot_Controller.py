@@ -6,17 +6,20 @@ from Breathing_Motion_Controller import BreathingMotionController
 from Gripper_Control import ControlGripper
 
 # Initialize robot, breathing controller, and gripper controller globally
-robotModel = URBasic.robotModel.RobotModel()
-robot = URBasic.urScriptExt.UrScriptExt(host='192.168.0.13', robotModel=robotModel)
-breathing_controller = BreathingMotionController(robot)
-gripper = ControlGripper(robot)
+#robotModel = URBasic.robotModel.RobotModel()
+#robot = URBasic.urScriptExt.UrScriptExt(host='192.168.0.13', robotModel=robotModel)
+#breathing_controller = BreathingMotionController(robot)
+#gripper = ControlGripper(robot)
 
-def move_robot(pose):
+def move_robot(robot, pose):
     """
     Move the robot to the specified pose.
     pose: Tuple of joint angles and two booleans (hovering, gripper_state).
           Format: (j1, j2, j3, j4, j5, j6, hovering, gripper_state)
     """
+
+    breathing_controller = BreathingMotionController(robot)
+    gripper = ControlGripper(robot)
     # Unpack the pose
     joint_angles = pose[:6]
     hovering = pose[6]
@@ -26,10 +29,10 @@ def move_robot(pose):
     print("Moving to target position...")
     command = MoveToPositionCommand(robot, joint_angles)
     command.execute()
-    while not command.is_reached():
-        print("Moving towards target position...")
-        time.sleep(0.5)
-    print("Target position reached.")
+    #while not command.is_reached():
+        #print("Moving towards target position...")
+        #time.sleep(0.5)
+    #print("Target position reached.")
 
     # Handle the gripper state
     if gripper_state:

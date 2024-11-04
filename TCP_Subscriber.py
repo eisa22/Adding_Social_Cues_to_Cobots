@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 
+import threading
+
 class TCPReceiver:
     def __init__(self, robot_ip):
         try:
@@ -16,17 +18,41 @@ class TCPReceiver:
 
     def get_cartesian_coordinates(self):
         """Getter method to retrieve the TCP position in Cartesian coordinates."""
+        global tcp_x, tcp_y, tcp_z
         if self.rtde_receive:
             try:
                 tcp_position = self.rtde_receive.getActualTCPPose()
-                x, y, z = tcp_position[0], tcp_position[1], tcp_position[2]
-                print(f"Cartesian Coordinates: X = {x}, Y = {y}, Z = {z}")
-                return x, y, z
+                tcp_x, tcp_y, tcp_z = tcp_position[0], tcp_position[1], tcp_position[2]
+                print(f"Cartesian Coordinates: X = {tcp_x}, Y = {tcp_y}, Z = {tcp_z}")
+                
             except Exception as e:
                 print(f"Error: Connection issue during data retrieval. Exception: {e}")
         else:
+            tcp_x, tcp_y, tcp_z = 0, 0, 0
             print("No active connection to the robot.")
-        return None
+        
+    
+    
+    def parallel_get_cartesian_coordinates(self, parallel_cartesian_hz:float = 41.0):
+        while is_parallel_cartesian:
+            self.get_cartesian_coordinates()
+            time.sleep(1 / parallel_cartesian_hz)
+    
+    def run_parallel_get_cartesian_coordinates(self, is_running: bool, parallel_cartesian_hz:float = 41.0) -> threading.Thread | None:
+        global is_parallel_cartesian
+        is_parallel_cartesian = is_running
+
+        if is_running:
+            cartesian_thread = threading.Thread(target=self.parallel_get_cartesian_coordinates, args=(parallel_cartesian_hz,))
+            cartesian_thread.start()
+            return cartesian_thread
+        else:
+            is_parallel_cartesian= False
+            return None
+
+    
+    
+    
 
 def update_plot(i, tcp_receiver, vector, ax):
     coords = tcp_receiver.get_cartesian_coordinates()
@@ -38,7 +64,7 @@ def update_plot(i, tcp_receiver, vector, ax):
         ax.figure.canvas.draw()
 
 def main():
-    robot_ip = '192.168.0.13'
+    robot_ip = '192.168.0.12'
     print("Attempting to connect to the robot for TCP position data...")
     
     tcp_receiver = TCPReceiver(robot_ip)
