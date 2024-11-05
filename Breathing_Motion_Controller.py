@@ -10,7 +10,7 @@ class BreathingMotionController:
         self.breathing = False
         self.base_joint_positions = None
 
-    def start_breathing(self):
+    def start_breathing(selfz):
         if not self.breathing:
             print("Starting breathing motion")
             self.breathing = True
