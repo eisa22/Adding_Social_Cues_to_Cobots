@@ -12,7 +12,7 @@ from TCP_Subscriber import TCPReceiver
 from furhat_functions import Pose
 
 # Robot data
-robot_ip = "192.168.0.12"
+robot_ip = "127.0.0.1"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -58,12 +58,13 @@ def main():
     fh = FurhatRemoteAPI("localhost")
     fh.set_voice(name="Matthew")
     fh.set_face(character="Titan", mask="default")
-    tcp_receiver.run_parallel_get_cartesian_coordinates(True)
+    tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
     set_led(fh, 0, 0, 0)
     #set_pose(endeffector, 0, 0, 0)
     set_pose(offset, 0, 0, -2)
     look(fh, endeffector, offset)
     #tcp_receiver.run_parallel_get_cartesian_coordinates(True)
+    looking_thread = run_parallel_looking(fh, True, pose, offset)
     move_robot(robot, initial_position)
 
     
@@ -71,7 +72,7 @@ def main():
 
     set_led(fh, 255, 0, 0)
     while not is_reached(robot, initial_position):
-        print("TCP_Position", tcp_x, tcp_y, tcp_z)
+        print("TCP_Position", pose.x, pose.y, pose.z)
         print("Moving towards initial position...")
         time.sleep(0.5)
 

@@ -16,38 +16,34 @@ class TCPReceiver:
             print(f"Error: Could not connect to the robot at {robot_ip}. Exception: {e}")
             self.rtde_receive = None
 
-    def get_cartesian_coordinates(self):
+    def get_cartesian_coordinates(self, pose):
         """Getter method to retrieve the TCP position in Cartesian coordinates."""
-        global tcp_x, tcp_y, tcp_z
         if self.rtde_receive:
             try:
                 tcp_position = self.rtde_receive.getActualTCPPose()
-                tcp_x, tcp_y, tcp_z = tcp_position[0], tcp_position[1], tcp_position[2]
-                print(f"Cartesian Coordinates: X = {tcp_x}, Y = {tcp_y}, Z = {tcp_z}")
-                
+                pose.x, pose.y, pose.z = tcp_position[0], tcp_position[1], tcp_position[2]
+                print(f"Cartesian Coordinates: X = {pose.x}, Y = {pose.y}, Z = {pose.z}")
             except Exception as e:
                 print(f"Error: Connection issue during data retrieval. Exception: {e}")
         else:
-            tcp_x, tcp_y, tcp_z = 0, 0, 0
+            pose.x, pose.y, pose.z = 0, 0, 0
             print("No active connection to the robot.")
-        
-    
-    
-    def parallel_get_cartesian_coordinates(self, parallel_cartesian_hz:float = 41.0):
+
+    def parallel_get_cartesian_coordinates(self, pose, parallel_cartesian_hz: float = 41.0):
         while is_parallel_cartesian:
-            self.get_cartesian_coordinates()
+            self.get_cartesian_coordinates(pose)
             time.sleep(1 / parallel_cartesian_hz)
-    
-    def run_parallel_get_cartesian_coordinates(self, is_running: bool, parallel_cartesian_hz:float = 41.0) -> threading.Thread | None:
+
+    def run_parallel_get_cartesian_coordinates(self, is_running: bool, pose, parallel_cartesian_hz: float = 41.0) -> threading.Thread | None:
         global is_parallel_cartesian
         is_parallel_cartesian = is_running
 
         if is_running:
-            cartesian_thread = threading.Thread(target=self.parallel_get_cartesian_coordinates, args=(parallel_cartesian_hz,))
+            cartesian_thread = threading.Thread(target=self.parallel_get_cartesian_coordinates, args=(pose, parallel_cartesian_hz))
             cartesian_thread.start()
             return cartesian_thread
         else:
-            is_parallel_cartesian= False
+            is_parallel_cartesian = False
             return None
 
     
