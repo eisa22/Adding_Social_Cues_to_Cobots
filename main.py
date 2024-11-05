@@ -12,7 +12,7 @@ from TCP_Subscriber import TCPReceiver
 from furhat_functions import Pose
 
 # Robot data
-robot_ip = "127.0.0.1"
+robot_ip = "172.20.10.3"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -50,41 +50,51 @@ def is_reached(robot, target_position):
 
 
 def main():
+    print("init start")
     global endeffector, offset
-    global tcp_x, tcp_y, tcp_z
+    #global tcp_x, tcp_y, tcp_z
 
 
     # Create an instance of the FurhatRemoteAPI class, providing the address of the robot or the SDK running the virtual robot
     fh = FurhatRemoteAPI("localhost")
     fh.set_voice(name="Matthew")
     fh.set_face(character="Titan", mask="default")
-    tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
     set_led(fh, 0, 0, 0)
-    #set_pose(endeffector, 0, 0, 0)
     set_pose(offset, 0, 0, -2)
-    look(fh, endeffector, offset)
-    #tcp_receiver.run_parallel_get_cartesian_coordinates(True)
+    print("init done")
+    say(fh, "Init done")
+    time.sleep(3)
+
+    tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
     looking_thread = run_parallel_looking(fh, True, pose, offset)
-    move_robot(robot, initial_position)
-
     
-
-
+    move_robot(robot, initial_position)
     set_led(fh, 255, 0, 0)
     while not is_reached(robot, initial_position):
         print("TCP_Position", pose.x, pose.y, pose.z)
         print("Moving towards initial position...")
         time.sleep(0.5)
-
     print("Initial position reached.")
     set_led(fh, 0, 255, 0)
+
+    time.sleep(3)
+
+    move_robot(robot, target_position)
+    set_led(fh, 255, 0, 0)
+    while not is_reached(robot, target_position):
+        print("TCP_Position", pose.x, pose.y, pose.z)
+        print("Moving towards initial position...")
+        time.sleep(0.5)
+    print("Initial position reached.")
+    set_led(fh, 0, 255, 0)
+
 
 
    
     say(fh, "Hi, i am a virtual furhat robot head.")
     say(fh, "Should I move to next position?", 5.0)
     listen_for_and_retry(fh, ["okay", "ok", "Okay", "OK", "Ok"], 1.5, 0.0, 10, is_print=True)
-    move_robot(robot, target_position)
+    move_robot(robot, initial_position)
     time.sleep(3)
 
 
@@ -92,7 +102,7 @@ def main():
 
 
 
-
+    """
 
     #Last working stand'____________________________________________________________
     say(fh, "Hi, i am a virtual furhat robot head. This is a quick demonstration of how to work with me.", 7.5)
@@ -159,7 +169,7 @@ def main():
     print(listen_for(fh, ["goodbye", "good bye"], True))
 
 
-
+    """
 
 
 

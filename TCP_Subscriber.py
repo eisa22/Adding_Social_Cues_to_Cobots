@@ -34,7 +34,7 @@ class TCPReceiver:
             self.get_cartesian_coordinates(pose)
             time.sleep(1 / parallel_cartesian_hz)
 
-    def run_parallel_get_cartesian_coordinates(self, is_running: bool, pose, parallel_cartesian_hz: float = 41.0) -> threading.Thread | None:
+    def run_parallel_get_cartesian_coordinates(self, pose, is_running: bool, parallel_cartesian_hz: float = 41.0) -> threading.Thread | None:
         global is_parallel_cartesian
         is_parallel_cartesian = is_running
 
@@ -60,7 +60,7 @@ def update_plot(i, tcp_receiver, vector, ax):
         ax.figure.canvas.draw()
 
 def main():
-    robot_ip = '192.168.0.12'
+    robot_ip = '172.20.10.3'
     print("Attempting to connect to the robot for TCP position data...")
     
     tcp_receiver = TCPReceiver(robot_ip)
