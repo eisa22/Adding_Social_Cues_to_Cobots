@@ -18,7 +18,8 @@ p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -9.81)
 
 # Path to your UR3 URDF model (adjust this path as needed)
-ur3_path = "Simulation/urdf/ur3e.urdf"  # Replace with the actual path to your UR3 URDF
+# ur3_path = "Simulation/urdf/robotiq_arg85_description/robots/robotiq_arg85_description.URDF"
+ur3_path = "Simulation/urdf/ur3e_copy.urdf"  # Replace with the actual path to your UR3 URDF
 print("Loading UR3 URDF from:", os.path.abspath(ur3_path))
 
 # Load the UR3 robot into the simulation
