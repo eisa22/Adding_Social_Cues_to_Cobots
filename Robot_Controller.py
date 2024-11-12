@@ -29,10 +29,10 @@ def move_robot(robot, pose):
     print("Moving to target position...")
     command = MoveToPositionCommand(robot, joint_angles)
     command.execute()
-    #while not command.is_reached():
-        #print("Moving towards target position...")
-        #time.sleep(0.5)
-    #print("Target position reached.")
+    while not command.is_reached():
+        print("Moving towards target position...")
+        time.sleep(0.5)
+    print("Target position reached.")
 
     # Handle the gripper state
     if gripper_state:

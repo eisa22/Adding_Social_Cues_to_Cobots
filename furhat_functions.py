@@ -53,6 +53,27 @@ def set_led(furhat: FurhatRemoteAPI, red, green, blue):
     # Set the LED lights between 0 and 255
     furhat.set_led(red=red, green=green, blue=blue)
 
+def set_led_color_name(furhat: FurhatRemoteAPI, color_name = "none"):
+        # Set the LED lights in a predefined color
+        if color_name == "none":
+            furhat.set_led(red=0, green=0, blue=0)
+        elif color_name == "white":
+            furhat.set_led(red=255, green=255, blue=255)
+        elif color_name == "red":
+            furhat.set_led(red=255, green=0, blue=0)
+        elif color_name == "green":
+            furhat.set_led(red=0, green=255, blue=0)
+        elif color_name == "blue":
+            furhat.set_led(red=0, green=0, blue=255)
+        elif color_name == "yellow":
+            furhat.set_led(red=255, green=255, blue=0)
+        elif color_name == "purple":
+            furhat.set_led(red=255, green=0, blue=255)
+        elif color_name == "cyan":
+            furhat.set_led(red=0, green=255, blue=255)
+        elif color_name == "orange":
+            furhat.set_led(red=255, green=165, blue=0)
+
 def gesture(furhat: FurhatRemoteAPI, gesture_name):
     # Perform a named gesture
     # gesture_name is string
@@ -90,10 +111,10 @@ def listen(furhat: FurhatRemoteAPI):
     speech = furhat.listen()
     return speech.message
 
-def listen_and_say_back(furhat: FurhatRemoteAPI, text_before):
+def listen_and_say_back(furhat: FurhatRemoteAPI, text_before, sleeptime_text = 0.0):
     speech = listen(furhat)
     text = f"{text_before} {speech}"
-    say(furhat, text, 0.0)
+    say(furhat, text, sleeptime_text)
     return speech
 
 def listen_for(furhat: FurhatRemoteAPI, texts: list[str], is_print=False):
@@ -104,6 +125,16 @@ def listen_for(furhat: FurhatRemoteAPI, texts: list[str], is_print=False):
         return True
     return False
 
+def listen_for_silent(furhat: FurhatRemoteAPI, texts: list[str], is_print=False):
+    speech = furhat.listen()
+    if is_print:
+        print(speech.message)
+    if speech.message == "" or speech.message == " ":
+        return -1
+    if speech.message in texts:
+        return 1
+    return 0
+
 def listen_for_and_retry(furhat: FurhatRemoteAPI, texts: list[str], sleeptime_text, sleeptime_retry = 0.0, max_tries: int = 10, is_print=False):
     tries = 0
     result = False
@@ -112,10 +143,26 @@ def listen_for_and_retry(furhat: FurhatRemoteAPI, texts: list[str], sleeptime_te
         if not result:
             tries += 1
             if tries >= max_tries:
-                # Print fail and return False after reaching max_tries
                 print("Too many tries!")
                 return False
             time.sleep(sleeptime_retry)
             say_again_text = f"Please say {texts[0]} again!"
             say(furhat, say_again_text, sleeptime_text)
+    return True
+
+def listen_for_and_retry_silent(furhat: FurhatRemoteAPI, texts: list[str], sleeptime_text, sleeptime_retry = 0.0, max_tries: int = 10, is_print=False):
+    tries = 0
+    result = False
+    while result != 1 and tries < max_tries:
+        result = listen_for_silent(furhat, texts, is_print)
+        if result == 0: # wrong speech
+            tries += 1
+            if tries >= max_tries:
+                print("Too many tries!")
+                return False
+            time.sleep(sleeptime_retry)
+            say_again_text = f"Please say {texts[0]} again!"
+            say(furhat, say_again_text, sleeptime_text)
+        if result == -1 and is_print:
+            print("no speech detected")
     return True
