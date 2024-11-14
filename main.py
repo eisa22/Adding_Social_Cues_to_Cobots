@@ -148,7 +148,7 @@ def main():
         say(fh, f"Awesome, let's start working {human_name}!", 3.0)
         gesture(fh, "Smile")
         time.sleep(2.0)
-        execute_movement(robot, home)
+        execute_movement(robot, home_go)
 
 
     for p in parts:
@@ -163,16 +163,18 @@ def main():
         say(fh, f"I bring you a {p[0]} body part")
         set_led_color_name(fh, p[0])
         look(fh, body_rack, offset)
-        execute_movement(robot, pos_pick_body_h)
+        execute_movement(robot, pos_pick_body_h_go)
         time.sleep(0.5)
+        execute_movement(robot, pos_pick_body_go)
         execute_movement(robot, pos_pick_body)
         time.sleep(0.5)
         execute_movement(robot,  pos_place_body_h)
         time.sleep(0.5)
         look(fh, holder, offset)
         execute_movement(robot, pos_place_body)
-        execute_movement(robot,  pos_place_body_h)
-        execute_movement(robot,  home)
+        execute_movement(robot, pos_place_body_go)
+        execute_movement(robot,  pos_place_body_h_go)
+        execute_movement(robot,  home_go)
 
         # Ball Part
         look(fh, human, offset)
@@ -188,10 +190,12 @@ def main():
         # Top Part
         say(fh, f"I bring you a {p[2]} body part and hold it in position")
         set_led_color_name(fh, p[2])
-        move_robot(robot, pos_pick_top_h)
-        move_robot(robot, pos_pick_top)
-        move_robot(robot, pos_place_top_h)
-        move_robot(robot, pos_place_top)
+        execute_movement(robot, pos_pick_top_h_go)
+        execute_movement(robot, pos_pick_top_go)
+        execute_movement(robot, pos_pick_top)
+        execute_movement(robot, pos_place_top_h)
+        execute_movement(robot, pos_place_top)
+        
         look(fh, holder, offset)
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
@@ -208,8 +212,9 @@ def main():
         say(fh, "Great job!")
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
-        move_robot(robot, pos_pick_top_h)
-        move_robot(robot, home)
+        execute_movement(robot, pos_place_top_go)
+        execute_movement(robot, pos_place_top_h_go)
+        execute_movement(robot, home_go)
 
         # Knob Part
         time.sleep(1.0)
