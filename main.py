@@ -125,7 +125,7 @@ def main():
     set_pose(finished_bin, 0.6, -0.2, 1.0)
     look(fh, human, offset)
     say(fh, "init done", 1.5)
-    welcome_message = True
+    welcome_message = False
     print("____Finished Init Furhat____")
 
     input("--- Press enter to start! ---")
@@ -157,24 +157,29 @@ def main():
         say(fh, "Say next when we can continue with the next controller!", 3.0)
         listen_for_and_retry_silent(fh, ["next"], 2, is_print=True)
         gesture(fh, "BrowRaise")
-        time.sleep(1)
+        time.sleep(1.5)
 
         # Body Part
         say(fh, f"I bring you a {p[0]} body part")
         set_led_color_name(fh, p[0])
         look(fh, body_rack, offset)
         execute_movement(robot, pos_pick_body_h_go)
-        time.sleep(0.5)
+        time.sleep(0.1)
         execute_movement(robot, pos_pick_body_go)
+        time.sleep(0.1)
         execute_movement(robot, pos_pick_body)
-        time.sleep(0.5)
+        time.sleep(0.1)
         execute_movement(robot,  pos_place_body_h)
-        time.sleep(0.5)
+        time.sleep(0.1)
         look(fh, holder, offset)
         execute_movement(robot, pos_place_body)
+        time.sleep(0.1)
         execute_movement(robot, pos_place_body_go)
+        time.sleep(0.1)
         execute_movement(robot,  pos_place_body_h_go)
+        time.sleep(0.1)
         execute_movement(robot,  home_go)
+        time.sleep(0.1)
 
         # Ball Part
         look(fh, human, offset)
@@ -191,15 +196,20 @@ def main():
         say(fh, f"I bring you a {p[2]} body part and hold it in position")
         set_led_color_name(fh, p[2])
         execute_movement(robot, pos_pick_top_h_go)
+        time.sleep(0.1)
         execute_movement(robot, pos_pick_top_go)
+        time.sleep(0.1)
         execute_movement(robot, pos_pick_top)
+        time.sleep(0.1)
         execute_movement(robot, pos_place_top_h)
+        time.sleep(0.1)
         execute_movement(robot, pos_place_top)
+        time.sleep(0.1)
         
         look(fh, holder, offset)
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
-        time.sleep(2.0)
+        #time.sleep(2.0)
 
         # Mount screws
         look(fh, holder, offset)
@@ -213,11 +223,14 @@ def main():
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
         execute_movement(robot, pos_place_top_go)
+        time.sleep(0.1)
         execute_movement(robot, pos_place_top_h_go)
+        time.sleep(0.1)
         execute_movement(robot, home_go)
+        time.sleep(0.1)
 
         # Knob Part
-        time.sleep(1.0)
+        #time.sleep(1.0)
         look(fh, human, offset)
         set_led_color_name(fh, p[3])
         say(fh, f"Mount two {p[3]} knobs", 3.0)
