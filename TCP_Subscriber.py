@@ -22,7 +22,7 @@ class TCPReceiver:
             try:
                 tcp_position = self.rtde_receive.getActualTCPPose()
                 pose.x, pose.y, pose.z = tcp_position[0], tcp_position[1], tcp_position[2]
-                print(f"Cartesian Coordinates: X = {pose.x}, Y = {pose.y}, Z = {pose.z}")
+                #print(f"Cartesian Coordinates: X = {pose.x}, Y = {pose.y}, Z = {pose.z}")
             except Exception as e:
                 print(f"Error: Connection issue during data retrieval. Exception: {e}")
         else:

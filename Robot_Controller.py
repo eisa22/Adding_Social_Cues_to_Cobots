@@ -4,12 +4,15 @@ import math
 from Move_Robot import MoveToPositionCommand
 from Breathing_Motion_Controller import BreathingMotionController
 from Gripper_Control import ControlGripper
+from TCP_Subscriber import TCPReceiver
+from furhat_functions import Pose
+from furhat_functions import *
 
-# Initialize robot, breathing controller, and gripper controller globally
-#robotModel = URBasic.robotModel.RobotModel()
-#robot = URBasic.urScriptExt.UrScriptExt(host='192.168.0.13', robotModel=robotModel)
-#breathing_controller = BreathingMotionController(robot)
-#gripper = ControlGripper(robot)
+# Initialize global variables for the robot and subsystems
+robot_ip = "192.168.0.10"
+robotModel = URBasic.robotModel.RobotModel()
+robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
+tcp_receiver = TCPReceiver(robot_ip)
 
 def move_robot(robot, pose):
     """
@@ -17,16 +20,19 @@ def move_robot(robot, pose):
     pose: Tuple of joint angles and two booleans (hovering, gripper_state).
           Format: (j1, j2, j3, j4, j5, j6, hovering, gripper_state)
     """
-
+    # Initialize controllers
     breathing_controller = BreathingMotionController(robot)
     gripper = ControlGripper(robot)
+
     # Unpack the pose
+    if len(pose) != 8:
+        raise ValueError("Pose must be a tuple of 6 joint angles and 2 booleans (hovering, gripper_state).")
     joint_angles = pose[:6]
     hovering = pose[6]
     gripper_state = pose[7]
 
     # Move to the target joint positions
-    print("Moving to target position...")
+    print(f"Moving to target position: {joint_angles}")
     command = MoveToPositionCommand(robot, joint_angles)
     command.execute()
     while not command.is_reached():
@@ -48,34 +54,49 @@ def move_robot(robot, pose):
         breathing_controller.start_breathing()
     else:
         breathing_controller.stop_breathing()
-    time.sleep(3)  # Wait to simulate holding at the position
+    time.sleep(3)  # Simulate holding at the position
 
 def main():
+    """
+    Main function to execute a sequence of robot movements.
+    """
     # Define target positions
-    initial_position = (
-        math.radians(0), math.radians(-90), math.radians(0), 
-        math.radians(-90), math.radians(0), math.radians(0), False, False
-    )
-    hover_position = (
-        math.radians(0), math.radians(-120), math.radians(-50), 
-        math.radians(-115), math.radians(90), math.radians(0), True, False
-    )
-    target_position = (
-        math.radians(45), math.radians(-120), math.radians(-52), 
-        math.radians(-114), math.radians(90), math.radians(0), False, True
+    home = (
+        math.radians(-90), math.radians(-98), math.radians(-126), 
+        math.radians(-45), math.radians(90), math.radians(0), False, False
     )
 
-    # Execute the movements
-    move_robot(initial_position)
-    time.sleep(1)
-    move_robot(hover_position)
-    time.sleep(3)
-    move_robot(target_position)
-    time.sleep(3)
-    move_robot(hover_position)  # Return to hover and start breathing again
+    pos_pick_top = (
+        math.radians(-114), math.radians(-95), math.radians(-104), 
+        math.radians(-45), math.radians(91), math.radians(20), False, True
+    )
+
+    print("Waiting for everything to be ready...")
+    time.sleep(2)
+    print("Robot initialized.")
+
+    try:
+        # Execute the movements
+        move_robot(robot, home)
+        print("Home position reached.")
+
+        time.sleep(1)
+        move_robot(robot, pos_pick_top)
+        print("Pick top position reached.")
+
+        time.sleep(3)
+
+    except KeyboardInterrupt:
+        print("Program interrupted by user.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        print("Stopping the robot.")
+        robot.stopj(a=2.0)  # Safely stop the robot
+
 
 if __name__ == "__main__":
     # Reset errors and initialize connection
-    robot.reset_error()
-    print("Robot initialized")
+    print("Resetting robot errors and initializing connection...")
+    # robot.reset_error()  # Uncomment if the robot requires error resetting
     main()
