@@ -9,7 +9,7 @@ from furhat_functions import *
 from Positions import *
 from furhat_remote_api import FurhatRemoteAPI
 from furhat_functions import * 
-from robotiq_gripper import RobotiqGripper
+import robotiq_gripper 
 
 
 
@@ -19,6 +19,7 @@ robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
 pose = Pose()
+gripper = robotiq_gripper.RobotiqGripper()
 
 # Definition of global variables for Furhat
 is_parallel_looking = False
@@ -48,7 +49,7 @@ def move_robot(robot, pose):
     """
     # Initialize controllers
     breathing_controller = BreathingMotionController(robot)
-    gripper = ControlGripper(robot)
+    #gripper = ControlGripper(robot)
 
     # Unpack the pose
     if len(pose) != 8:
@@ -68,11 +69,17 @@ def move_robot(robot, pose):
 
     # Handle the gripper state
     if gripper_state:
-        print("Closing gripper.")
-        gripper.close_gripper()
+        try:
+
+            print("Closing gripper.")
+            gripper.move_and_wait_for_pos(255,255,255)
+
+        except RuntimeError as e:
+            print(f"Error during gripper operation: {e}")
+
     else:
         print("Opening gripper.")
-        gripper.open_gripper()
+        gripper.move_and_wait_for_pos(0,255,255)
 
     # Handle hovering and breathing state
     if hovering:
@@ -109,6 +116,10 @@ def main():
     # Initialize controllers
     print("____Init Robot____")
     tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
+    gripper.connect(robot_ip, 63352)
+    print("Gripper connected")
+    gripper.activate()
+    print("Gripper activated")
     
     print("____Finished Init Robot____")
 
@@ -211,6 +222,10 @@ def main():
         execute_movement(robot, pos_pick_top_go)
         time.sleep(0.1)
         execute_movement(robot, pos_pick_top)
+        time.sleep(0.1)
+        execute_movement(robot, pos_pick_top_h)
+        time.sleep(0.1)
+        execute_movement(robot, pos_pick_body_app)
         time.sleep(0.1)
         execute_movement(robot, pos_place_top_h)
         time.sleep(0.1)

@@ -14,20 +14,20 @@ home_go = (
 
 pos_pick_body = (
     math.radians(-161.09), math.radians(-74.80), math.radians(102.73), 
-    math.radians(-115.48), math.radians(-88.81), math.radians(17.4), False, False
+    math.radians(-115.48), math.radians(-88.81), math.radians(17.4), False, True
 )
 pos_pick_body_go = (
     math.radians(-161.09), math.radians(-74.80), math.radians(102.73), 
-    math.radians(-115.48), math.radians(-88.81), math.radians(17.4), False, True
+    math.radians(-115.48), math.radians(-88.81), math.radians(17.4), False, False
 )
 
 pos_pick_body_h = (
-    math.radians(-159.48), math.radians(-83.09), math.radians(93.52), 
-    math.radians(-103.03), math.radians(-90.31), math.radians(19.10), False, True
+    math.radians(-161.11), math.radians(-80.25), math.radians(88.73), 
+    math.radians(-96.03), math.radians(-88.74), math.radians(17.36), False, True
 )
 pos_pick_body_h_go = (
-    math.radians(-159.48), math.radians(-83.09), math.radians(93.52), 
-    math.radians(-103.03), math.radians(-90.31), math.radians(19.10), False, False
+    math.radians(-161.11), math.radians(-80.25), math.radians(88.73), 
+    math.radians(-96.03), math.radians(-88.74), math.radians(17.36), False, False
 )
 
 
@@ -74,21 +74,21 @@ pos_place_body_rem_go = (
 
 
 pos_pick_top = (
-    math.radians(-114), math.radians(-95), math.radians(-104), 
-    math.radians(-45), math.radians(91), math.radians(20), False, True
+    math.radians(-159.96), math.radians(-75.8), math.radians(97.96), 
+    math.radians(-109.73), math.radians(-88.74), math.radians(18.52), False, True
 )
 pos_pick_top_go = (
-    math.radians(-114), math.radians(-95), math.radians(-104), 
-    math.radians(-45), math.radians(91), math.radians(20), False, False
+    math.radians(-159.96), math.radians(-75.8), math.radians(97.96), 
+    math.radians(-109.73), math.radians(-88.74), math.radians(18.52), False, False
 )
 
 pos_pick_top_h = (
-    math.radians(-114), math.radians(-95), math.radians(-104), 
-    math.radians(-45), math.radians(91), math.radians(20), False, True
+    math.radians(-159.98), math.radians(-79.29), math.radians(85.76), 
+    math.radians(-94.04), math.radians(-88.7), math.radians(18.5), False, True
 )
 pos_pick_top_h_go = (
-    math.radians(-114), math.radians(-95), math.radians(-104), 
-    math.radians(-45), math.radians(91), math.radians(20), False, False
+    math.radians(-159.98), math.radians(-79.29), math.radians(85.76), 
+    math.radians(-94.04), math.radians(-88.7), math.radians(18.5), False, False
 )
 
 pos_place_top = (

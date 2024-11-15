@@ -16,7 +16,7 @@ class MoveToPositionCommand(RobotCommand):
 
     def execute(self):
         print("Sending move command to target position:", self.target_position)
-        self.robot.movej(q=self.target_position, a=0.5, v=2.0)
+        self.robot.movej(q=self.target_position, a=0.5, v=1.0)
         time.sleep(1)  # Allow some time for the command to initiate
 
     def is_reached(self):
@@ -32,7 +32,7 @@ class HoverAndBreatheCommand(RobotCommand):
 
     def execute(self):
         print("Returning to hover position and starting breathing motion")
-        self.robot.movej(q=self.hover_position, a=0.5, v=2.0)
+        self.robot.movej(q=self.hover_position, a=0.5, v=1.0)
         time.sleep(1)  # Allow some time for the command to initiate
         self.breathing_controller.start_breathing()
 
