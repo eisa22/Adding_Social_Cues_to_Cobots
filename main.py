@@ -9,11 +9,12 @@ from furhat_functions import *
 from Positions import *
 from furhat_remote_api import FurhatRemoteAPI
 from furhat_functions import * 
+from robotiq_gripper import RobotiqGripper
 
 
 
 # Robot data
-robot_ip = "192.168.0.10"
+robot_ip = "192.168.1.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -108,6 +109,7 @@ def main():
     # Initialize controllers
     print("____Init Robot____")
     tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
+    
     print("____Finished Init Robot____")
 
     # Initialize Furhat
@@ -152,6 +154,8 @@ def main():
 
 
     for p in parts:
+        execute_movement(robot,  home_go)
+        time.sleep(0.1)
         # Before next controller is started, robot is in body rack position
         look(fh, human, offset)
         say(fh, "Say next when we can continue with the next controller!", 3.0)
@@ -169,14 +173,21 @@ def main():
         time.sleep(0.1)
         execute_movement(robot, pos_pick_body)
         time.sleep(0.1)
+        execute_movement(robot, pos_pick_body_h)
+        time.sleep(0.1)
+        execute_movement(robot,  pos_pick_body_app)
+        time.sleep(0.1)
         execute_movement(robot,  pos_place_body_h)
         time.sleep(0.1)
+        
         look(fh, holder, offset)
         execute_movement(robot, pos_place_body)
         time.sleep(0.1)
         execute_movement(robot, pos_place_body_go)
         time.sleep(0.1)
-        execute_movement(robot,  pos_place_body_h_go)
+        execute_movement(robot,  pos_place_body_rem_go)
+        time.sleep(0.1)
+        execute_movement(robot,  pos_pick_body_app)
         time.sleep(0.1)
         execute_movement(robot,  home_go)
         time.sleep(0.1)

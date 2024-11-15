@@ -7,9 +7,10 @@ from Gripper_Control import ControlGripper
 from TCP_Subscriber import TCPReceiver
 from furhat_functions import Pose
 from furhat_functions import *
+from Positions import *
 
 # Initialize global variables for the robot and subsystems
-robot_ip = "192.168.0.10"
+robot_ip = "192.168.1.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -60,16 +61,7 @@ def main():
     """
     Main function to execute a sequence of robot movements.
     """
-    # Define target positions
-    home = (
-        math.radians(-90), math.radians(-98), math.radians(-126), 
-        math.radians(-45), math.radians(90), math.radians(0), False, False
-    )
-
-    pos_pick_top = (
-        math.radians(-114), math.radians(-95), math.radians(-104), 
-        math.radians(-45), math.radians(91), math.radians(20), False, True
-    )
+    
 
     print("Waiting for everything to be ready...")
     time.sleep(2)
@@ -77,11 +69,11 @@ def main():
 
     try:
         # Execute the movements
-        move_robot(robot, home)
+        move_robot(robot, home_go)
         print("Home position reached.")
 
         time.sleep(1)
-        move_robot(robot, pos_pick_top)
+        move_robot(robot, pos_pick_top_h_go)
         print("Pick top position reached.")
 
         time.sleep(3)
