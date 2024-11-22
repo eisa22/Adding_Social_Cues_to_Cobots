@@ -9,15 +9,18 @@ from furhat_functions import *
 from Positions import *
 from furhat_remote_api import FurhatRemoteAPI
 from furhat_functions import * 
+import robotiq_gripper 
 
 
 
 # Robot data
+USE_UR_ROBOT = False # Set to True if using UR robot, False if using URSIM
 robot_ip = "192.168.0.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
 pose = Pose()
+gripper = robotiq_gripper.RobotiqGripper()
 
 # Definition of global variables for Furhat
 is_parallel_looking = False
@@ -26,6 +29,7 @@ offset = Pose()
 holder, human, body_rack, top_rack, finished_bin = Pose(), Pose(), Pose(), Pose(), Pose()
 tcp_x, tcp_y, tcp_z = 0, 0, 0
 is_parallel_cartesian = False
+human_name = ""
 
 
 # colors and parameters of parts:
@@ -47,7 +51,7 @@ def move_robot(robot, pose):
     """
     # Initialize controllers
     breathing_controller = BreathingMotionController(robot)
-    gripper = ControlGripper(robot)
+    #gripper = ControlGripper(robot)
 
     # Unpack the pose
     if len(pose) != 8:
@@ -66,12 +70,20 @@ def move_robot(robot, pose):
     print("Target position reached.")
 
     # Handle the gripper state
-    if gripper_state:
-        print("Closing gripper.")
-        gripper.close_gripper()
-    else:
-        print("Opening gripper.")
-        gripper.open_gripper()
+
+    if USE_UR_ROBOT:
+        if gripper_state:
+            try:
+
+                print("Closing gripper.")
+                gripper.move_and_wait_for_pos(255,255,255)
+
+            except RuntimeError as e:
+                print(f"Error during gripper operation: {e}")
+
+        else:
+            print("Opening gripper.")
+            gripper.move_and_wait_for_pos(0,255,255)
 
     # Handle hovering and breathing state
     if hovering:
@@ -108,6 +120,15 @@ def main():
     # Initialize controllers
     print("____Init Robot____")
     tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
+
+    if USE_UR_ROBOT:
+        gripper.connect(robot_ip, 63352)
+        print("Gripper connected")
+        gripper.activate()
+        print("Gripper activated")
+    execute_movement(robot, home_go)
+
+    
     print("____Finished Init Robot____")
 
     # Initialize Furhat
@@ -125,7 +146,7 @@ def main():
     set_pose(finished_bin, 0.6, -0.2, 1.0)
     look(fh, human, offset)
     say(fh, "init done", 1.5)
-    welcome_message = False
+    welcome_message = True
     print("____Finished Init Furhat____")
 
     input("--- Press enter to start! ---")
@@ -133,6 +154,7 @@ def main():
 
     # Welcome message
     if welcome_message:
+
         look(fh, human, offset)
         gesture(fh, "BigSmile")
         time.sleep(1.5)
@@ -148,7 +170,7 @@ def main():
         say(fh, f"Awesome, let's start working {human_name}!", 3.0)
         gesture(fh, "Smile")
         time.sleep(2.0)
-        execute_movement(robot, home_go)
+        
 
 
     for p in parts:
@@ -169,14 +191,21 @@ def main():
         time.sleep(0.1)
         execute_movement(robot, pos_pick_body)
         time.sleep(0.1)
+        execute_movement(robot, pos_pick_body_h)
+        time.sleep(0.1)
+        execute_movement(robot,  pos_pick_body_app)
+        time.sleep(0.1)
         execute_movement(robot,  pos_place_body_h)
         time.sleep(0.1)
+        
         look(fh, holder, offset)
         execute_movement(robot, pos_place_body)
         time.sleep(0.1)
         execute_movement(robot, pos_place_body_go)
         time.sleep(0.1)
-        execute_movement(robot,  pos_place_body_h_go)
+        execute_movement(robot,  pos_place_body_rem_go)
+        time.sleep(0.1)
+        execute_movement(robot,  pos_pick_body_app)
         time.sleep(0.1)
         execute_movement(robot,  home_go)
         time.sleep(0.1)
@@ -193,7 +222,7 @@ def main():
         set_led_color_name(fh, "none")
 
         # Top Part
-        say(fh, f"I bring you a {p[2]} body part and hold it in position")
+        say(fh, f"I bring you a {p[2]} body part")
         set_led_color_name(fh, p[2])
         execute_movement(robot, pos_pick_top_h_go)
         time.sleep(0.1)
@@ -201,10 +230,23 @@ def main():
         time.sleep(0.1)
         execute_movement(robot, pos_pick_top)
         time.sleep(0.1)
+        execute_movement(robot, pos_pick_top_h)
+        time.sleep(0.1)
+        execute_movement(robot, pos_pick_body_app)
+        time.sleep(0.1)
         execute_movement(robot, pos_place_top_h)
         time.sleep(0.1)
         execute_movement(robot, pos_place_top)
         time.sleep(0.1)
+        execute_movement(robot, pos_place_top_go)
+        time.sleep(0.1)
+        execute_movement(robot, pos_place_top_rem_go)
+        time.sleep(0.1)
+        execute_movement(robot, pos_pick_body_app)
+        time.sleep(0.1)
+        execute_movement(robot, home_go)
+        time.sleep(0.1)
+        
         
         look(fh, holder, offset)
         gesture(fh, "Smile")
@@ -222,12 +264,7 @@ def main():
         say(fh, "Great job!")
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
-        execute_movement(robot, pos_place_top_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_top_h_go)
-        time.sleep(0.1)
-        execute_movement(robot, home_go)
-        time.sleep(0.1)
+        
 
         # Knob Part
         #time.sleep(1.0)
