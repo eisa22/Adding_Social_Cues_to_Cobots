@@ -14,6 +14,7 @@ import robotiq_gripper
 
 
 # Robot data
+USE_UR_ROBOT = False # Set to True if using UR robot, False if using URSIM
 robot_ip = "192.168.0.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
@@ -69,18 +70,20 @@ def move_robot(robot, pose):
     print("Target position reached.")
 
     # Handle the gripper state
-    if gripper_state:
-        try:
 
-            print("Closing gripper.")
-            gripper.move_and_wait_for_pos(255,255,255)
+    if USE_UR_ROBOT:
+        if gripper_state:
+            try:
 
-        except RuntimeError as e:
-            print(f"Error during gripper operation: {e}")
+                print("Closing gripper.")
+                gripper.move_and_wait_for_pos(255,255,255)
 
-    else:
-        print("Opening gripper.")
-        gripper.move_and_wait_for_pos(0,255,255)
+            except RuntimeError as e:
+                print(f"Error during gripper operation: {e}")
+
+        else:
+            print("Opening gripper.")
+            gripper.move_and_wait_for_pos(0,255,255)
 
     # Handle hovering and breathing state
     if hovering:
@@ -117,10 +120,13 @@ def main():
     # Initialize controllers
     print("____Init Robot____")
     tcp_receiver.run_parallel_get_cartesian_coordinates(pose, True)
-    gripper.connect(robot_ip, 63352)
-    print("Gripper connected")
-    gripper.activate()
-    print("Gripper activated")
+
+    if USE_UR_ROBOT:
+        gripper.connect(robot_ip, 63352)
+        print("Gripper connected")
+        gripper.activate()
+        print("Gripper activated")
+
     
     print("____Finished Init Robot____")
 
