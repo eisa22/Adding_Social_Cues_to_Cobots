@@ -14,7 +14,7 @@ import robotiq_gripper
 
 
 # Robot data
-robot_ip = "192.168.1.10"
+robot_ip = "192.168.0.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -28,6 +28,7 @@ offset = Pose()
 holder, human, body_rack, top_rack, finished_bin = Pose(), Pose(), Pose(), Pose(), Pose()
 tcp_x, tcp_y, tcp_z = 0, 0, 0
 is_parallel_cartesian = False
+human_name = ""
 
 
 # colors and parameters of parts:
@@ -138,7 +139,7 @@ def main():
     set_pose(finished_bin, 0.6, -0.2, 1.0)
     look(fh, human, offset)
     say(fh, "init done", 1.5)
-    welcome_message = False
+    welcome_message = True
     print("____Finished Init Furhat____")
 
     input("--- Press enter to start! ---")
@@ -215,7 +216,7 @@ def main():
         set_led_color_name(fh, "none")
 
         # Top Part
-        say(fh, f"I bring you a {p[2]} body part and hold it in position")
+        say(fh, f"I bring you a {p[2]} body part")
         set_led_color_name(fh, p[2])
         execute_movement(robot, pos_pick_top_h_go)
         time.sleep(0.1)
@@ -231,6 +232,15 @@ def main():
         time.sleep(0.1)
         execute_movement(robot, pos_place_top)
         time.sleep(0.1)
+        execute_movement(robot, pos_place_top_go)
+        time.sleep(0.1)
+        execute_movement(robot, pos_place_top_rem_go)
+        time.sleep(0.1)
+        execute_movement(robot, pos_pick_body_app)
+        time.sleep(0.1)
+        execute_movement(robot, home)
+        time.sleep(0.1)
+        
         
         look(fh, holder, offset)
         gesture(fh, "Smile")
@@ -248,12 +258,7 @@ def main():
         say(fh, "Great job!")
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
-        execute_movement(robot, pos_place_top_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_top_h_go)
-        time.sleep(0.1)
-        execute_movement(robot, home_go)
-        time.sleep(0.1)
+        
 
         # Knob Part
         #time.sleep(1.0)

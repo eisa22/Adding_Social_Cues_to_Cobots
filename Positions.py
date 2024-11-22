@@ -11,6 +11,10 @@ home_go = (
     math.radians(-216), math.radians(-70), math.radians(-115), 
     math.radians(-35), math.radians(90), math.radians(358), False, False
 )
+home_go_hover = (
+    math.radians(-216), math.radians(-70), math.radians(-115), 
+    math.radians(-35), math.radians(90), math.radians(358), True, False
+)
 
 pos_pick_body = (
     math.radians(-161.09), math.radians(-74.80), math.radians(102.73), 
@@ -92,19 +96,32 @@ pos_pick_top_h_go = (
 )
 
 pos_place_top = (
-    math.radians(-30), math.radians(-130), math.radians(-104), 
-    math.radians(-45), math.radians(90), math.radians(321), False, True
+    math.radians(37.49), math.radians(-63.67), math.radians(130.51), 
+    math.radians(-205.46), math.radians(-120.62), math.radians(293.30), False, True
 )
 pos_place_top_go = (
-    math.radians(-30), math.radians(-130), math.radians(-104), 
-    math.radians(-45), math.radians(90), math.radians(321), False, False
+    math.radians(37.49), math.radians(-63.67), math.radians(130.51), 
+    math.radians(-205.46), math.radians(-120.62), math.radians(293.30), False, False
 )
 
-pos_place_top_h = (
-    math.radians(-30), math.radians(-120), math.radians(-104), 
-    math.radians(-45), math.radians(90), math.radians(321), False, True
-)
 pos_place_top_h_go = (
-    math.radians(-30), math.radians(-120), math.radians(-104), 
-    math.radians(-45), math.radians(90), math.radians(321), False, False
+    math.radians(32.26), math.radians(-80.92), math.radians(113.95), 
+    math.radians(-168.1), math.radians(-114.37), math.radians(289.86), False, False
 )
+pos_place_top_h = (
+    math.radians(32.26), math.radians(-80.92), math.radians(113.95), 
+    math.radians(-168.1), math.radians(-114.37), math.radians(289.86), False, True
+)
+
+
+
+pos_place_top_rem = (
+    math.radians(43.01), math.radians(-64.38), math.radians(140.24), 
+    math.radians(-220.2), math.radians(-123.5), math.radians(291.3), False, True
+)
+
+pos_place_top_rem_go = (
+    math.radians(43.01), math.radians(-64.38), math.radians(140.24), 
+    math.radians(-220.2), math.radians(-123.5), math.radians(291.3), False, False
+)
+
