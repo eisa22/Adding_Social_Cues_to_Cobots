@@ -126,6 +126,7 @@ def main():
         print("Gripper connected")
         gripper.activate()
         print("Gripper activated")
+    execute_movement(robot, home_go)
 
     
     print("____Finished Init Robot____")
@@ -153,6 +154,7 @@ def main():
 
     # Welcome message
     if welcome_message:
+
         look(fh, human, offset)
         gesture(fh, "BigSmile")
         time.sleep(1.5)
@@ -168,12 +170,10 @@ def main():
         say(fh, f"Awesome, let's start working {human_name}!", 3.0)
         gesture(fh, "Smile")
         time.sleep(2.0)
-        execute_movement(robot, home_go)
+        
 
 
     for p in parts:
-        execute_movement(robot,  home_go)
-        time.sleep(0.1)
         # Before next controller is started, robot is in body rack position
         look(fh, human, offset)
         say(fh, "Say next when we can continue with the next controller!", 3.0)
@@ -244,7 +244,7 @@ def main():
         time.sleep(0.1)
         execute_movement(robot, pos_pick_body_app)
         time.sleep(0.1)
-        execute_movement(robot, home)
+        execute_movement(robot, home_go)
         time.sleep(0.1)
         
         
