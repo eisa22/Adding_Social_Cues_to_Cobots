@@ -146,22 +146,22 @@ def main():
     print("____Finished Init Robot____")
 
     # Initialize Furhat
-    print("____Init Furhat____")
-    global endeffector, offset, holder, human, body_rack, top_rack, finished_bin, human_name
-    fh = FurhatRemoteAPI("localhost")
-    fh.set_voice(name="Matthew")
-    fh.set_face(character="Jamie", mask="default")
-    set_led_color_name(fh, "none")
-    set_pose(offset, 0.3, 0.35, -1.0)
-    set_pose(holder, 0.2, 0.15, 0.4)
-    set_pose(human, 0.2, 0.4, 0.65)
-    set_pose(body_rack, -0.2, 0.1, -0.3)
-    set_pose(top_rack, -0.35, 0.1, -0.3)
-    set_pose(finished_bin, 0.6, -0.2, 1.0)
-    look(fh, human, offset)
-    say(fh, "init done", 1.5)
+    # print("____Init Furhat____")
+    # global endeffector, offset, holder, human, body_rack, top_rack, finished_bin, human_name
+    # fh = FurhatRemoteAPI("localhost")
+    # fh.set_voice(name="Matthew")
+    # fh.set_face(character="Jamie", mask="default")
+    # set_led_color_name(fh, "none")
+    # set_pose(offset, 0.3, 0.35, -1.0)
+    # set_pose(holder, 0.2, 0.15, 0.4)
+    # set_pose(human, 0.2, 0.4, 0.65)
+    # set_pose(body_rack, -0.2, 0.1, -0.3)
+    # set_pose(top_rack, -0.35, 0.1, -0.3)
+    # set_pose(finished_bin, 0.6, -0.2, 1.0)
+    # look(fh, human, offset)
+    # say(fh, "init done", 1.5)
     welcome_message = True
-    print("____Finished Init Furhat____")
+    # print("____Finished Init Furhat____")
 
     input("--- Press enter to start! ---")
     time.sleep(1.0)
