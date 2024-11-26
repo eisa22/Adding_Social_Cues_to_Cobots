@@ -2,6 +2,7 @@ import URBasic
 import time
 from Move_Robot import MoveToPositionCommand
 from Breathing_Motion_Controller import BreathingMotionController
+from Dashboard import Dashboard
 from Gripper_Control import ControlGripper
 from TCP_Subscriber import TCPReceiver
 from furhat_functions import Pose
@@ -22,6 +23,7 @@ robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
 pose = Pose()
 gripper = robotiq_gripper.RobotiqGripper()
+dashboard = Dashboard()
 robot_is_moving = False
 
 # Definition of global variables for Furhat
@@ -142,7 +144,8 @@ def main():
         print("Gripper activated")
     execute_movement(robot, home_go)
 
-    
+    # Start the dashboard
+    dashboard.start_dashboard()
     print("____Finished Init Robot____")
 
     # Initialize Furhat
@@ -168,40 +171,23 @@ def main():
 
     # Welcome message
     if welcome_message:
-
-        look(fh, human, offset)
-        gesture(fh, "BigSmile")
-        time.sleep(1.5)
-        say(fh, "Hi, i am furhat. Today I will be working with you.", 4.0)
-
-        name_correct = False
-        while not name_correct:
-            say(fh, "What is your name?", 2.0)
-            human_name = listen_and_say_back(fh, "Hello ", 3.0)
-            print(human_name)
-            say(fh, "Did I say that correctly?", 1.5)
-            name_correct = listen_for(fh, ["yes", "ok", "okay", "ja", "ya", "correct"], is_print=True)
-        say(fh, f"Awesome, let's start working {human_name}!", 3.0)
-        gesture(fh, "Smile")
+        
+        dashboard.pop_dashboard(f"This is the instruction guide for the RC-Assembly task")
         time.sleep(2.0)
         
 
 
     for p in parts:
-        # Before next controller is started, robot is in body rack position
-        look(fh, human, offset)
-        say(fh, "Say next when we can continue with the next controller!", 3.0)
-        listen_for_and_retry_silent(fh, ["next"], 2, is_print=True)
-        gesture(fh, "BrowRaise")
-        time.sleep(1.5)
+        
 
         # Body Part
         # Start robot movement in a separate thread
         positions = [pos_pick_body_h_go, pos_pick_body_go, pos_pick_body, pos_pick_body_h, pos_pick_body_app, pos_place_body_h]
         start_robot_movement(robot, positions)
-        say(fh, f"I bring you a {p[0]} body part. Meanwhile assemble the box according to the provided guide.")
-        set_led_color_name(fh, p[0])
-        look(fh, body_rack, offset)
+        
+        dashboard.pop_dashboard(f"Assemble the carpet box according to the provided guide. [PRESS ENTER to continue]")
+        input("--- Press enter to continue ---")
+        
 
         # Wait until movement is finished
         while robot_is_moving:
@@ -210,10 +196,9 @@ def main():
         
 
         #Place body part
-        look(fh, holder, offset)
         positions = [pos_place_body, pos_place_body_go, pos_place_body_rem_go]
         start_robot_movement(robot, positions)
-        say(fh, f"Careful, now I am going to place the body into the holder")
+        dashboard.pop_dashboard(f"Careful, now I am going to place the body into the holder")
 
         # Wait until movement is finished
         while robot_is_moving:
@@ -225,37 +210,24 @@ def main():
         
 
     # Ball Part
-        look(fh, human, offset)
-        set_led_color_name(fh, p[1])
+      
         
-
-        say(fh, f"Please mount two {p[1]} ball parts, meanwhile i get you the top plate.", 3.0)
-        # Wait until movement is finished
-        say(fh, "Say ok when you are done!", 3.0)
-        gesture(fh, "Smile")
-        look(fh, holder, offset)
-        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
-        look(fh, human, offset)
-        set_led_color_name(fh, "none")
+        dashboard.pop_dashboard(f"Mount two {p[1]} ball parts, meanwhile i get you the top plate. [PRESS ENTER to continue]")
+        input("--- Press enter to continue ---")
 
         # Wait until movement is finished
         while robot_is_moving:
             time.sleep(0.1)
         
-
-        say(fh, f"Careful, I will now put the topplate on the remote control.", 3.0)
+        dashboard.pop_dashboard(f"Careful, I will now put the topplate on the remote control.")
         positions = [pos_place_top_h, pos_place_top, pos_place_top_go]
         start_robot_movement(robot, positions)
-        look(fh, holder, offset)
 
         # Wait until movement is finished
         while robot_is_moving:
             time.sleep(0.1)
 
         
-       
-        gesture(fh, "Smile")
-        set_led_color_name(fh, "none")
 
         positions = [pos_place_top_rem_go, pos_pick_body_app, home_go]
         start_robot_movement(robot, positions)
@@ -263,65 +235,38 @@ def main():
       
 
         # Mount screws
-        look(fh, holder, offset)
-        say(fh, f"Screw down the {p[2]} top with four screws", 4.0)
-        say(fh, "Say ok when done!", 2.0)
-        look(fh, holder, offset)
-        gesture(fh, "Smile")
-        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
-        look(fh, human, offset)
-        say(fh, "Great job!")
-        gesture(fh, "Smile")
-        set_led_color_name(fh, "none")
+        dashboard.pop_dashboard(f"Screw down the {p[2]} top with four screws. [PRESS ENTER to continue]")
+        input("--- Press enter to continue ---")
         
         # Wait until movement is finished
         while robot_is_moving:
             time.sleep(0.1)
 
         # Knob Part
-        #time.sleep(1.0)
-        look(fh, human, offset)
-        set_led_color_name(fh, p[3])
-        say(fh, f"Mount two {p[3]} knobs", 3.0)
-        say(fh, "Say ok when finished!", 2.5)
-        look(fh, holder, offset)
-        gesture(fh, "BigSmile")
-        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
-        look(fh, human, offset)
-        set_led_color_name(fh, "none")
+        
+        dashboard.pop_dashboard(f"Mount two {p[3]} knobs. [PRESS ENTER to continue]")
+        input("--- Press enter to continue ---")
 
         # Part inspection
-        look(fh, human, offset)
-        set_led_color_name(fh, "none")
-        say(fh, f"Please inspect the controller", 3.0)
-        look(fh, holder, offset)
-        set_led_color_name(fh, p[0])
-        say(fh, f"{p[0]} body", 2.0)
-        set_led_color_name(fh, p[1])
-        say(fh, f"{p[1]} ball parts", 2.5)
-        set_led_color_name(fh, p[2])
-        say(fh, f"{p[2]} top", 2.0)
-        set_led_color_name(fh, p[3])
-        say(fh, f"{p[3]} knobs", 2.5)
-        look(fh, human, offset)
-        say(fh, "Say ok when you inspected it!", 3.0)
-        set_led_color_name(fh, "none")
-        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
+        dashboard.pop_dashboard(f"Please inspect the controller:")
+        time.sleep(2)
+        
+        dashboard.pop_dashboard(f"{p[0]} body")
+        time.sleep(2)
+        dashboard.pop_dashboard(f"{p[1]} ball parts")
+        time.sleep(2)
+        dashboard.pop_dashboard(f"{p[2]} top")
+        time.sleep(2)
+        dashboard.pop_dashboard(f"{p[3]} knobs")
+        time.sleep(2)
 
-        # Finished Controller
-        # Humans puts finished controller in bin for finished controllers
-        gesture(fh, "BigSmile")
-        time.sleep(1.0)
-        say(fh, f"Well done {human_name}! Please take the controller and put it into the box. Then close the box and put it aside.", 2.0)
-        gesture(fh, "BigSmile")
-        look(fh, finished_bin, offset)
-        time.sleep(3)
+        dashboard.pop_dashboard(f"If correct, take the controller and put it into the box. Then close the box and put it aside. [PRESS ENTER to continue]")
+        input("--- Press enter to continue ---")
+        
 
     # End message
-    look(fh, human, offset)
-    say(fh, f"Thank you for your great work {human_name}! Goodbye", 5.0)
-    gesture(fh, "BigSmile")
-    time.sleep(3.0)
+    dashboard.pop_dashboard(f"Task finished. Thank you!")
+    time.sleep(2.0)
     print("program finished")
 
 
