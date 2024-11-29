@@ -17,7 +17,7 @@ import time
 
 # Robot data
 USE_UR_ROBOT = False # Set to True if using UR robot, False if using URSIM
-robot_ip = "192.168.0.10"
+robot_ip = "192.168.31.224"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -185,7 +185,7 @@ def main():
         positions = [pos_pick_body_h_go, pos_pick_body_go, pos_pick_body, pos_pick_body_h, pos_pick_body_app, pos_place_body_h]
         start_robot_movement(robot, positions)
         
-        dashboard.pop_dashboard(f"Assemble the carpet box according to the provided guide. [PRESS ENTER to continue]")
+        dashboard.pop_dashboard(f"Assemble the cardboard box according to the provided guide. [PRESS ENTER to continue]")
         input("--- Press enter to continue ---")
         
 

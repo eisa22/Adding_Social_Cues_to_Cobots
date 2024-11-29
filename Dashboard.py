@@ -19,12 +19,9 @@ class Dashboard:
         """Private method to create and run the GUI."""
         self.root = tk.Tk()
         self.root.title("Robot Controller Dashboard")
-
-        # Fullscreen mode
-        self.root.attributes("-fullscreen", True)
-
-        # Bind the Escape key to exit fullscreen and close the window
-        self.root.bind("<Escape>", lambda e: self.stop_dashboard())
+        
+        # Set window size (not fullscreen)
+        self.root.geometry("800x600")  # Width x Height
 
         # Create static elements
         tk.Label(self.root, text="Instruction Guide", font=("Helvetica", 16, "bold")).pack(pady=10)
