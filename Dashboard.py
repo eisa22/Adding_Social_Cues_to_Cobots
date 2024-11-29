@@ -4,7 +4,6 @@ import threading
 import time
 from datetime import datetime
 
-
 class Dashboard:
     def __init__(self):
         """Initialize the Dashboard class."""
@@ -14,6 +13,7 @@ class Dashboard:
         self.current_instruction_label = None
         self.history_frame = None
         self.instructions_history = []  # List to keep track of past instructions
+        self.green_tick_label = None  # Label for the green tick
 
     def _dashboard_loop(self):
         """Private method to create and run the GUI."""
@@ -62,6 +62,11 @@ class Dashboard:
         self.current_instruction_label = tk.Label(self.root, text="No instructions yet.", font=("Helvetica", 16), fg="blue")
         self.current_instruction_label.pack(pady=20, expand=True)
 
+        # Green tick (initially hidden)
+        self.green_tick_label = tk.Label(self.root, text="✓", font=("Helvetica", 30), fg="green")
+        self.green_tick_label.pack(pady=10)  # Add it to the window, but initially it will be hidden
+        self.green_tick_label.pack_forget()  # Hide it by default
+
         # Start update loops
         self._update_time()
 
@@ -96,6 +101,17 @@ class Dashboard:
 
             # Update the current instruction
             self.current_instruction_label.config(text=message, fg="blue", font=("Helvetica", 20))  # Larger font
+
+    def show_green_tick(self, show=True):
+        """Show or hide the green tick based on the boolean input."""
+        if show:
+            self.green_tick_label.pack()  # Show the green tick
+            # Change the font color of the instruction label to green
+            self.current_instruction_label.config(fg="green")
+        else:
+            self.green_tick_label.pack_forget()  # Hide the green tick
+            # Revert the font color of the instruction label to blue
+            self.current_instruction_label.config(fg="blue")
 
     def start_dashboard(self):
         """Start the dashboard in a separate thread."""
@@ -132,6 +148,12 @@ if __name__ == "__main__":
             print(f"Executing: {instruction}")
             dashboard.pop_dashboard(instruction)  # Send instruction to the dashboard
             time.sleep(3)  # Simulate some robot operation
+
+            # Simulate showing a green tick after completing certain steps
+            if i == 2:  # After moving to position B
+                dashboard.show_green_tick(show=True)  # Show the green tick and turn the font green
+            elif i == 4:  # After returning to home position
+                dashboard.show_green_tick(show=False)  # Hide the green tick and turn the font blue
 
     try:
         # Start the dashboard

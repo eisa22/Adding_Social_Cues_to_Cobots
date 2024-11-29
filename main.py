@@ -158,6 +158,7 @@ def main():
 
         for p in parts:
             # Body Part
+            dashboard.show_green_tick(show=False)
             dashboard.pop_dashboard(f"Assemble the cardboard box according to the provided guide.")
             positions = [pos_pick_body_h_go, pos_pick_body_go, pos_pick_body, pos_pick_body_h, pos_pick_body_app, pos_place_body_h, pos_place_body, pos_place_body_go, pos_place_body_rem_go, pos_pick_body_app]
             start_robot_movement(robot, positions)
@@ -165,9 +166,10 @@ def main():
             while robot_is_moving:
                 time.sleep(0.1)
 
+            dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
-            
+            dashboard.show_green_tick(show=False)
      
             while robot_is_moving:
                 time.sleep(0.1)
@@ -181,16 +183,22 @@ def main():
 
             # Ball Part
             dashboard.pop_dashboard(f"Mount two {p[1]} ball parts, meanwhile i get you the top plate.")
+            time.sleep(3)
+            dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
+            dashboard.show_green_tick(show=False)
+            
             positions = [pos_place_top_h, pos_place_top, pos_place_top_go, pos_place_top_rem_go, pos_pick_body_app, home_go]
             start_robot_movement(robot, positions)
             dashboard.pop_dashboard(f"While top plate is placed, apply stickers to box according to the guide.")
             
             while robot_is_moving:
                 time.sleep(0.1)
+            dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
+            dashboard.show_green_tick(show=False)
             
 
         
@@ -198,16 +206,20 @@ def main():
             # Mount screws
             dashboard.pop_dashboard(f"Screw down the {p[2]} top with four screws.")
             time.sleep(4)
+            dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
+            dashboard.show_green_tick(show=False)
             
             
 
             # Knob Part
             dashboard.pop_dashboard(f"Mount two {p[3]} knobs. ")
             time.sleep(3)
+            dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
+            dashboard.show_green_tick(show=False)
 
             # Part inspection
             dashboard.pop_dashboard(f"Please inspect the controller:")
@@ -224,8 +236,10 @@ def main():
 
             dashboard.pop_dashboard(f"If correct, take the controller and put it into the box. Then close the box and put it aside.")
             time.sleep(3)
+            dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
+            dashboard.show_green_tick(show=False)
             
 
         # End message
