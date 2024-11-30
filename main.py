@@ -16,7 +16,7 @@ import time
 
 # Robot data
 USE_UR_ROBOT = False # Set to True if using UR robot, False if using URSIM
-robot_ip = "192.168.0.10"
+robot_ip = "192.168.31.224"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -190,7 +190,7 @@ def main():
     for p in parts:
         # Before next controller is started, robot is in body rack position
         look(fh, human, offset)
-        say(fh, "Say next when we can continue with the next controller!", 3.0)
+        say(fh, "Say next when we can continue with a new controller!", 3.0)
         listen_for_and_retry_silent(fh, ["next"], 2, is_print=True)
         gesture(fh, "BrowRaise")
         time.sleep(1.5)
@@ -228,8 +228,9 @@ def main():
         look(fh, human, offset)
         set_led_color_name(fh, p[1])
         
-
-        say(fh, f"Please mount two {p[1]} ball parts, meanwhile i get you the top plate.", 3.0)
+        say(fh, f"Now I will get you the top plate. Meanawhile please mount two {p[1]} ball parts.", 3.0)
+        time.sleep(3.5)
+        say(fh, f"When finished with the two {p[1]} ball parts apply the stickers to the box according to the guide.", 3.0)
         # Wait until movement is finished
         say(fh, "Say ok when you are done!", 3.0)
         gesture(fh, "Smile")
@@ -265,7 +266,7 @@ def main():
         # Mount screws
         look(fh, holder, offset)
         say(fh, f"Screw down the {p[2]} top with four screws", 4.0)
-        say(fh, "Say ok when done!", 2.0)
+        say(fh, "Say ok when you are done!", 2.0)
         look(fh, holder, offset)
         gesture(fh, "Smile")
         listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
@@ -286,7 +287,7 @@ def main():
         say(fh, "Say ok when finished!", 2.5)
         look(fh, holder, offset)
         gesture(fh, "BigSmile")
-        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
+        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay", "next"], 2.2, is_print=True)
         look(fh, human, offset)
         set_led_color_name(fh, "none")
 
