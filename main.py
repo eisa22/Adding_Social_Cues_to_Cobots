@@ -16,7 +16,7 @@ import logging  # Add logging module
 
 # Robot data
 USE_UR_ROBOT = False  # Set to True if using UR robot, False if using URSIM
-robot_ip = "192.168.31.224"
+robot_ip = "192.168.0.8"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -159,7 +159,7 @@ def main():
         for p in parts:
             # Body Part
             dashboard.show_green_tick(show=False)
-            dashboard.pop_dashboard(f"Assemble the cardboard box according to the provided guide.")
+            dashboard.pop_dashboard(f"Get the box and assemble it according to the provided guide.")
             positions = [pos_pick_body_h_go, pos_pick_body_go, pos_pick_body, pos_pick_body_h, pos_pick_body_app, pos_place_body_h, pos_place_body, pos_place_body_go, pos_place_body_rem_go, pos_pick_body_app]
             start_robot_movement(robot, positions)
             
@@ -204,7 +204,7 @@ def main():
         
 
             # Mount screws
-            dashboard.pop_dashboard(f"Screw down the {p[2]} top with four screws.")
+            dashboard.pop_dashboard(f"Screw down the {p[2]} top with two screws.")
             time.sleep(4)
             dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
