@@ -36,7 +36,7 @@ human_name = ""
 
 # colors and parameters of parts:
 #         body,     balls,      top,        knobs       parameters
-parts = [["red",    "white",    "blue",     "yellow"],
+parts = [["yellow",    "yellow",    "red",     "blue"],
             ["blue",   "yellow",   "red",      "red"]]#,
             #["blue",   "white",    "blue",     "red"],
             #["red",    "white",    "red",      "yellow"],
@@ -160,7 +160,7 @@ def main():
     set_pose(finished_bin, 0.6, -0.2, 1.0)
     look(fh, human, offset)
     say(fh, "init done", 1.5)
-    welcome_message = True
+    welcome_message = False
     print("____Finished Init Furhat____")
 
     input("--- Press enter to start! ---")
@@ -185,7 +185,7 @@ def main():
         gesture(fh, "Smile")
         time.sleep(2.0)
         
-
+    say(fh, "Hi, i am Furhat. Today I will be working with you.", 4.0)
 
     for p in parts:
         # Before next controller is started, robot is in body rack position
@@ -199,7 +199,7 @@ def main():
         # Start robot movement in a separate thread
         positions = [pos_pick_body_h_go, pos_pick_body_go, pos_pick_body, pos_pick_body_h, pos_pick_body_app, pos_place_body_h]
         start_robot_movement(robot, positions)
-        say(fh, f"I bring you a {p[0]} body part. Meanwhile assemble the box according to the provided guide.")
+        say(fh, f"I bring you a {p[0]} body part. Meanwhile get the box and assemble it according to the provided guide.")
         set_led_color_name(fh, p[0])
         look(fh, body_rack, offset)
 
@@ -265,13 +265,13 @@ def main():
 
         # Mount screws
         look(fh, holder, offset)
-        say(fh, f"Screw down the {p[2]} top with four screws", 4.0)
+        say(fh, f"Screw down the {p[2]} top with two screws", 4.0)
         say(fh, "Say ok when you are done!", 2.0)
         look(fh, holder, offset)
         gesture(fh, "Smile")
         listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
         look(fh, human, offset)
-        say(fh, "Great job!")
+        say(fh, "Great job, we are almoust done!")
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
         
