@@ -4,72 +4,72 @@ import math
 
 # Define all the positions as variables
 home = (
-    math.radians(-180), math.radians(-57), math.radians(-115), 
-    math.radians(-90), math.radians(90), math.radians(360), False, True
+    math.radians(-180), math.radians(-45), math.radians(-120), 
+    math.radians(-105), math.radians(90), math.radians(357), False, True
 )
 home_go = (
-    math.radians(-180), math.radians(-57), math.radians(-115), 
-    math.radians(-90), math.radians(90), math.radians(360), False, False
+    math.radians(-180), math.radians(-45), math.radians(-120), 
+    math.radians(-105), math.radians(90), math.radians(357), False, False
 )
 home_go_hover = (
-    math.radians(-216), math.radians(-70), math.radians(-115), 
-    math.radians(-35), math.radians(90), math.radians(358), True, False
+    math.radians(-180), math.radians(-45), math.radians(-120), 
+    math.radians(-105), math.radians(90), math.radians(357), True, False
 )
 
 pos_pick_body = (
-    math.radians(-250.72), math.radians(-80.11), math.radians(-131.58), 
-    math.radians(-55.62), math.radians(90.93), math.radians(21.03), False, True
+    math.radians(-249.05), math.radians(-80.15), math.radians(-132.07), 
+    math.radians(-55.4), math.radians(89.07), math.radians(20.45), False, True
 )
 pos_pick_body_go = (
-    math.radians(-250.72), math.radians(-80.11), math.radians(-131.58), 
-    math.radians(-55.62), math.radians(90.93), math.radians(21.03), False, False
+    math.radians(-249.05), math.radians(-80.15), math.radians(-132.07), 
+    math.radians(-55.4), math.radians(89.07), math.radians(20.45), False, False
 )
 
 pos_pick_body_h = (
-    math.radians(-161.11), math.radians(-80.25), math.radians(88.73), 
-    math.radians(-96.03), math.radians(-88.74), math.radians(17.36), False, True
+    math.radians(-249.02), math.radians(-72.33), math.radians(-111.54), 
+    math.radians(-83.76), math.radians(89.07), math.radians(20.4), False, True
 )
 pos_pick_body_h_go = (
-    math.radians(-161.11), math.radians(-80.25), math.radians(88.73), 
-    math.radians(-96.03), math.radians(-88.74), math.radians(17.36), False, False
+    math.radians(-249.02), math.radians(-72.33), math.radians(-111.54), 
+    math.radians(-83.76), math.radians(89.07), math.radians(20.4), False, False
 )
 
 
 pos_pick_body_app = (
-    math.radians(-160), math.radians(-60), math.radians(-105), 
-    math.radians(-100), math.radians(88), math.radians(15), False, True
+    math.radians(-145.67), math.radians(-56), math.radians(-110), 
+    math.radians(-104), math.radians(89), math.radians(124), False, True
 )
 pos_pick_body_app_go = (
-    math.radians(-160), math.radians(-60), math.radians(-105), 
-    math.radians(-100), math.radians(88), math.radians(15), False, False
+    math.radians(-145.67), math.radians(-56), math.radians(-110), 
+    math.radians(-104), math.radians(89), math.radians(124), False, False
 )
 
 
 pos_place_body = (
-    math.radians(34.44), math.radians(-64.90), math.radians(88.04), 
-    math.radians(14.81), math.radians(116.74), math.radians(108.79), False, True
+    math.radians(-92.44), math.radians(-102.8), math.radians(-124.9), 
+    math.radians(-41.1), math.radians(37), math.radians(180), False, True
 )
 pos_place_body_go = (
-    math.radians(34.44), math.radians(-64.90), math.radians(88.04), 
-    math.radians(14.81), math.radians(116.74), math.radians(108.79), False, False
+    math.radians(-92.44), math.radians(-102.8), math.radians(-124.9), 
+    math.radians(-41.1), math.radians(37), math.radians(180), False, False
 )
 
 pos_place_body_h = (
-    math.radians(32.55), math.radians(-63.67), math.radians(77.45), 
-    math.radians(25.91), math.radians(115.03), math.radians(108.84), False, True
+    math.radians(-95), math.radians(-97.6), math.radians(-119), 
+    math.radians(-49), math.radians(34), math.radians(172), False, True
 )
 pos_place_body_h_go = (
-    math.radians(32.55), math.radians(-63.67), math.radians(77.45), 
-    math.radians(25.91), math.radians(115.03), math.radians(108.84), False, False
+    math.radians(-95), math.radians(-97.6), math.radians(-119), 
+    math.radians(-49), math.radians(34), math.radians(172), False, False
 )
 
 pos_place_body_rem = (
-    math.radians(41.42), math.radians(-72.37), math.radians(89.07), 
-    math.radians(27.2), math.radians(119.7), math.radians(117.0), False, True
+    math.radians(-83.58), math.radians(-89.22), math.radians(-125.34), 
+    math.radians(-62.8), math.radians(39.6), math.radians(189), False, True
 )
 pos_place_body_rem_go = (
-    math.radians(41.42), math.radians(-72.37), math.radians(89.07), 
-    math.radians(27.2), math.radians(119.7), math.radians(117.0), False, False
+    math.radians(-83.58), math.radians(-89.22), math.radians(-125.34), 
+    math.radians(-62.8), math.radians(39.6), math.radians(189), False, False
 )
 
 
@@ -78,50 +78,50 @@ pos_place_body_rem_go = (
 
 
 pos_pick_top = (
-    math.radians(-159.96), math.radians(-75.8), math.radians(97.96), 
-    math.radians(-109.73), math.radians(-88.74), math.radians(18.52), False, True
+    math.radians(-277.48), math.radians(-94.38), math.radians(-111.22), 
+    math.radians(-66.13), math.radians(89.41), math.radians(353.27), False, True
 )
 pos_pick_top_go = (
-    math.radians(-159.96), math.radians(-75.8), math.radians(97.96), 
-    math.radians(-109.73), math.radians(-88.74), math.radians(18.52), False, False
+    math.radians(-277.48), math.radians(-94.38), math.radians(-111.22), 
+    math.radians(-66.13), math.radians(89.41), math.radians(353.27), False, False
 )
 
 pos_pick_top_h = (
-    math.radians(-159.98), math.radians(-79.29), math.radians(85.76), 
-    math.radians(-94.04), math.radians(-88.7), math.radians(18.5), False, True
+    math.radians(-277.45), math.radians(-89.46), math.radians(-90.7), 
+    math.radians(-91.6), math.radians(89.4), math.radians(353.2), False, True
 )
 pos_pick_top_h_go = (
-    math.radians(-159.98), math.radians(-79.29), math.radians(85.76), 
-    math.radians(-94.04), math.radians(-88.7), math.radians(18.5), False, False
+    math.radians(-277.45), math.radians(-89.46), math.radians(-90.7), 
+    math.radians(-91.6), math.radians(89.4), math.radians(353.2), False, False
 )
 
 pos_place_top = (
-    math.radians(37.49), math.radians(-63.67), math.radians(130.51), 
-    math.radians(-205.46), math.radians(-120.62), math.radians(293.30), False, True
+    math.radians(-96.33), math.radians(-95.18), math.radians(-122.0), 
+    math.radians(-42.91), math.radians(46.72), math.radians(168.51), False, True
 )
 pos_place_top_go = (
-    math.radians(37.49), math.radians(-63.67), math.radians(130.51), 
-    math.radians(-205.46), math.radians(-120.62), math.radians(293.30), False, False
+    math.radians(-96.33), math.radians(-95.18), math.radians(-122.0), 
+    math.radians(-42.91), math.radians(46.72), math.radians(168.51), False, False
 )
 
 pos_place_top_h_go = (
-    math.radians(32.26), math.radians(-80.92), math.radians(113.95), 
-    math.radians(-168.1), math.radians(-114.37), math.radians(289.86), False, False
+    math.radians(-97.23), math.radians(-92.34), math.radians(-118.2), 
+    math.radians(-46), math.radians(39), math.radians(165), False, False
 )
 pos_place_top_h = (
-    math.radians(32.26), math.radians(-80.92), math.radians(113.95), 
-    math.radians(-168.1), math.radians(-114.37), math.radians(289.86), False, True
+    math.radians(-97.23), math.radians(-92.34), math.radians(-118.2), 
+    math.radians(-46), math.radians(39), math.radians(165), False, True
 )
 
 
 
 pos_place_top_rem = (
-    math.radians(43.01), math.radians(-64.38), math.radians(140.24), 
-    math.radians(-220.2), math.radians(-123.5), math.radians(291.3), False, True
+    math.radians(-79.20), math.radians(-82.76), math.radians(-126.7), 
+    math.radians(-67.05), math.radians(46.28), math.radians(192.16), False, True
 )
 
 pos_place_top_rem_go = (
-    math.radians(43.01), math.radians(-64.38), math.radians(140.24), 
-    math.radians(-220.2), math.radians(-123.5), math.radians(291.3), False, False
+    math.radians(-79.20), math.radians(-82.76), math.radians(-126.7), 
+    math.radians(-67.05), math.radians(46.28), math.radians(192.16), False, False
 )
 
