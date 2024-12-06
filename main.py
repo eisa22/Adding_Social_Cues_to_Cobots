@@ -35,7 +35,11 @@ is_parallel_cartesian = False
 human_name = ""
 
 # colors and parameters of parts:
-parts = [["red", "white", "blue", "yellow"], ["blue", "yellow", "red", "red"]]
+parts = [["blue",    "blue",    "yellow",     "yellow"],
+            ["red",   "yellow",   "blue",      "blue"]]#,
+            #["blue",   "white",    "blue",     "red"],
+            #["red",    "white",    "red",      "yellow"],
+            #["blue",   "yellow",   "blue",     "yellow"]]
 
 # Set up logging for debugging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
