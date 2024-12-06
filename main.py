@@ -16,7 +16,7 @@ import logging  # Add logging module
 
 # Robot data
 USE_UR_ROBOT = False  # Set to True if using UR robot, False if using URSIM
-robot_ip = "192.168.0.8"
+robot_ip = "192.168.1.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
