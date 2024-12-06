@@ -15,8 +15,8 @@ import time
 
 
 # Robot data
-USE_UR_ROBOT = False # Set to True if using UR robot, False if using URSIM
-robot_ip = "192.168.31.224"
+USE_UR_ROBOT = True # Set to True if using UR robot, False if using URSIM
+robot_ip = "192.168.1.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
@@ -36,8 +36,8 @@ human_name = ""
 
 # colors and parameters of parts:
 #         body,     balls,      top,        knobs       parameters
-parts = [["yellow",    "yellow",    "red",     "blue"],
-            ["blue",   "yellow",   "red",      "red"]]#,
+parts = [["blue",    "blue",    "yellow",     "yellow"],
+            ["red",   "yellow",   "blue",      "blue"]]#,
             #["blue",   "white",    "blue",     "red"],
             #["red",    "white",    "red",      "yellow"],
             #["blue",   "yellow",   "blue",     "yellow"]]
