@@ -194,7 +194,7 @@ def main():
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
             dashboard.show_green_tick(show=False)
-            dashboard.pop_dashboard(f"Top plate is bein placed")
+            dashboard.pop_dashboard(f"Top plate is being placed")
             
             positions = [pos_place_top_h, pos_place_top, pos_place_top_go, pos_place_top_rem_go, pos_pick_body_app, home_go]
             start_robot_movement(robot, positions)
@@ -212,7 +212,7 @@ def main():
 
             # Mount screws
             dashboard.pop_dashboard(f"Screw down the {p[2]} top with two screws.")
-            time.sleep(4)
+            time.sleep(10)
             dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
