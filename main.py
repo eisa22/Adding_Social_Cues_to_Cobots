@@ -194,6 +194,7 @@ def main():
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
             dashboard.show_green_tick(show=False)
+            dashboard.pop_dashboard(f"Top plate is bein placed")
             
             positions = [pos_place_top_h, pos_place_top, pos_place_top_go, pos_place_top_rem_go, pos_pick_body_app, home_go]
             start_robot_movement(robot, positions)
