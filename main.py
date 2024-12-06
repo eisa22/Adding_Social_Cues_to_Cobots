@@ -229,8 +229,9 @@ def main():
         set_led_color_name(fh, p[1])
         
         say(fh, f"Now I will get you the top plate. Meanawhile please mount two {p[1]} ball parts.", 3.0)
-        time.sleep(3.5)
+        time.sleep(6)
         say(fh, f"When finished with the two {p[1]} ball parts apply the stickers to the box according to the guide.", 3.0)
+        time.sleep(12)
         # Wait until movement is finished
         say(fh, "Say ok when you are done!", 3.0)
         gesture(fh, "Smile")
@@ -314,6 +315,7 @@ def main():
         gesture(fh, "BigSmile")
         time.sleep(1.0)
         say(fh, f"Well done {human_name}! Please take the controller and put it into the box. Then close the box and put it aside.", 2.0)
+        time.sleep(10.0)
         gesture(fh, "BigSmile")
         look(fh, finished_bin, offset)
         time.sleep(3)
