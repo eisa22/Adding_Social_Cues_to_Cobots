@@ -201,10 +201,10 @@ def main():
             
             while robot_is_moving:
                 time.sleep(0.1)
-            dashboard.show_green_tick(show=True)
-            dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
-            input("--- Press enter to continue ---")
-            dashboard.show_green_tick(show=False)
+            # dashboard.show_green_tick(show=True)
+            # dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
+            # input("--- Press enter to continue ---")
+            # dashboard.show_green_tick(show=False)
             
 
         
