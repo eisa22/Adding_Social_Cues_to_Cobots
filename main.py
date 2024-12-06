@@ -35,7 +35,7 @@ is_parallel_cartesian = False
 human_name = ""
 
 # colors and parameters of parts:
-parts = [["blue",    "blue",    "yellow",     "yellow"],
+parts = [["red",    "yellow",    "red",     "yellow"],
             ["red",   "yellow",   "blue",      "blue"]]#,
             #["blue",   "white",    "blue",     "red"],
             #["red",    "white",    "red",      "yellow"],
@@ -187,7 +187,9 @@ def main():
 
             # Ball Part
             dashboard.pop_dashboard(f"Mount two {p[1]} ball parts, meanwhile i get you the top plate.")
-            time.sleep(3)
+            time.sleep(6)
+            dashboard.pop_dashboard(f"While top plate is placed, apply stickers to box according to the guide.")
+            time.sleep(8)
             dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
@@ -195,7 +197,7 @@ def main():
             
             positions = [pos_place_top_h, pos_place_top, pos_place_top_go, pos_place_top_rem_go, pos_pick_body_app, home_go]
             start_robot_movement(robot, positions)
-            dashboard.pop_dashboard(f"While top plate is placed, apply stickers to box according to the guide.")
+            
             
             while robot_is_moving:
                 time.sleep(0.1)
@@ -219,7 +221,7 @@ def main():
 
             # Knob Part
             dashboard.pop_dashboard(f"Mount two {p[3]} knobs. ")
-            time.sleep(3)
+            time.sleep(6)
             dashboard.show_green_tick(show=True)
             dashboard.pop_dashboard(f"[PRESS ENTER to continue]")
             input("--- Press enter to continue ---")
