@@ -231,7 +231,7 @@ def main():
         say(fh, f"Now I will get you the top plate. Meanawhile please mount two {p[1]} ball parts.", 3.0)
         time.sleep(6)
         say(fh, f"When finished with the two {p[1]} ball parts apply the stickers to the box according to the guide.", 3.0)
-        time.sleep(12)
+        time.sleep(35)
         # Wait until movement is finished
         say(fh, "Say ok when you are done!", 3.0)
         gesture(fh, "Smile")
