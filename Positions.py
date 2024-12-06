@@ -4,12 +4,12 @@ import math
 
 # Define all the positions as variables
 home = (
-    math.radians(-216), math.radians(-70), math.radians(-115), 
-    math.radians(-35), math.radians(90), math.radians(358), False, True
+    math.radians(-180), math.radians(-57), math.radians(-115), 
+    math.radians(-90), math.radians(90), math.radians(360), False, True
 )
 home_go = (
-    math.radians(-216), math.radians(-70), math.radians(-115), 
-    math.radians(-35), math.radians(90), math.radians(358), False, False
+    math.radians(-180), math.radians(-57), math.radians(-115), 
+    math.radians(-90), math.radians(90), math.radians(360), False, False
 )
 home_go_hover = (
     math.radians(-216), math.radians(-70), math.radians(-115), 
@@ -17,12 +17,12 @@ home_go_hover = (
 )
 
 pos_pick_body = (
-    math.radians(-161.09), math.radians(-74.80), math.radians(102.73), 
-    math.radians(-115.48), math.radians(-88.81), math.radians(17.4), False, True
+    math.radians(-250.72), math.radians(-80.11), math.radians(-131.58), 
+    math.radians(-55.62), math.radians(90.93), math.radians(21.03), False, True
 )
 pos_pick_body_go = (
-    math.radians(-161.09), math.radians(-74.80), math.radians(102.73), 
-    math.radians(-115.48), math.radians(-88.81), math.radians(17.4), False, False
+    math.radians(-250.72), math.radians(-80.11), math.radians(-131.58), 
+    math.radians(-55.62), math.radians(90.93), math.radians(21.03), False, False
 )
 
 pos_pick_body_h = (
@@ -36,12 +36,12 @@ pos_pick_body_h_go = (
 
 
 pos_pick_body_app = (
-    math.radians(-19.41), math.radians(-144.94), math.radians(126.34), 
-    math.radians(-90.41), math.radians(-84.28), math.radians(252.25), False, True
+    math.radians(-160), math.radians(-60), math.radians(-105), 
+    math.radians(-100), math.radians(88), math.radians(15), False, True
 )
 pos_pick_body_app_go = (
-    math.radians(-19.41), math.radians(-144.94), math.radians(126.34), 
-    math.radians(-90.41), math.radians(-84.28), math.radians(252.25), False, False
+    math.radians(-160), math.radians(-60), math.radians(-105), 
+    math.radians(-100), math.radians(88), math.radians(15), False, False
 )
 
 
