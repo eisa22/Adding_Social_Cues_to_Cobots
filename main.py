@@ -10,17 +10,19 @@ from Positions import *
 from furhat_remote_api import FurhatRemoteAPI
 from furhat_functions import * 
 import robotiq_gripper 
-
+import threading
+import time
 
 
 # Robot data
-USE_UR_ROBOT = False # Set to True if using UR robot, False if using URSIM
-robot_ip = "192.168.0.10"
+USE_UR_ROBOT = True # Set to True if using UR robot, False if using URSIM
+robot_ip = "192.168.1.10"
 robotModel = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=robot_ip, robotModel=robotModel)
 tcp_receiver = TCPReceiver(robot_ip)
 pose = Pose()
 gripper = robotiq_gripper.RobotiqGripper()
+robot_is_moving = False
 
 # Definition of global variables for Furhat
 is_parallel_looking = False
@@ -34,8 +36,8 @@ human_name = ""
 
 # colors and parameters of parts:
 #         body,     balls,      top,        knobs       parameters
-parts = [["red",    "white",    "blue",     "yellow"],
-            ["blue",   "yellow",   "red",      "red"]]#,
+parts = [["blue",    "blue",    "yellow",     "yellow"],
+            ["red",   "yellow",   "blue",      "blue"]]#,
             #["blue",   "white",    "blue",     "red"],
             #["red",    "white",    "red",      "yellow"],
             #["blue",   "yellow",   "blue",     "yellow"]]
@@ -110,6 +112,18 @@ def execute_movement(robot, pose):
         print("Stopping the robot.")
         robot.stopj(a=2.0)  # Safely stop the robot
 
+def execute_movement_thread(robot, positions):
+    global robot_is_moving
+    robot_is_moving = True
+    for pos in positions:
+        execute_movement(robot, pos)
+        time.sleep(0.1)
+    robot_is_moving = False
+
+def start_robot_movement(robot, positions):
+    movement_thread = threading.Thread(target=execute_movement_thread, args=(robot, positions))
+    movement_thread.start()
+
 
 # Main Program to execute
 
@@ -146,7 +160,7 @@ def main():
     set_pose(finished_bin, 0.6, -0.2, 1.0)
     look(fh, human, offset)
     say(fh, "init done", 1.5)
-    welcome_message = True
+    welcome_message = False
     print("____Finished Init Furhat____")
 
     input("--- Press enter to start! ---")
@@ -171,49 +185,54 @@ def main():
         gesture(fh, "Smile")
         time.sleep(2.0)
         
-
+    say(fh, "Hi, i am Furhat. Today I will be working with you.", 4.0)
 
     for p in parts:
         # Before next controller is started, robot is in body rack position
         look(fh, human, offset)
-        say(fh, "Say next when we can continue with the next controller!", 3.0)
+        say(fh, "Say next when we can continue with a new controller!", 3.0)
         listen_for_and_retry_silent(fh, ["next"], 2, is_print=True)
         gesture(fh, "BrowRaise")
         time.sleep(1.5)
 
         # Body Part
-        say(fh, f"I bring you a {p[0]} body part")
+        # Start robot movement in a separate thread
+        positions = [pos_pick_body_h_go, pos_pick_body_go, pos_pick_body, pos_pick_body_h, pos_pick_body_app, pos_place_body_h]
+        start_robot_movement(robot, positions)
+        say(fh, f"I bring you a {p[0]} body part. Meanwhile get the box and assemble it according to the provided guide.")
         set_led_color_name(fh, p[0])
         look(fh, body_rack, offset)
-        execute_movement(robot, pos_pick_body_h_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_body_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_body)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_body_h)
-        time.sleep(0.1)
-        execute_movement(robot,  pos_pick_body_app)
-        time.sleep(0.1)
-        execute_movement(robot,  pos_place_body_h)
-        time.sleep(0.1)
-        
-        look(fh, holder, offset)
-        execute_movement(robot, pos_place_body)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_body_go)
-        time.sleep(0.1)
-        execute_movement(robot,  pos_place_body_rem_go)
-        time.sleep(0.1)
-        execute_movement(robot,  pos_pick_body_app)
-        time.sleep(0.1)
-        execute_movement(robot,  home_go)
-        time.sleep(0.1)
 
-        # Ball Part
+        # Wait until movement is finished
+        while robot_is_moving:
+            time.sleep(0.1)
+        
+        
+
+        #Place body part
+        look(fh, holder, offset)
+        positions = [pos_place_body, pos_place_body_go, pos_place_body_rem_go]
+        start_robot_movement(robot, positions)
+        say(fh, f"Careful, now I am going to place the body into the holder")
+
+        # Wait until movement is finished
+        while robot_is_moving:
+            time.sleep(0.1)
+
+        positions = [pos_pick_body_app, home_go, pos_pick_top_h_go, pos_pick_top_go, pos_pick_top, pos_pick_top_h, pos_pick_body_app]
+        start_robot_movement(robot, positions)
+
+        
+
+    # Ball Part
         look(fh, human, offset)
         set_led_color_name(fh, p[1])
-        say(fh, f"Please mount two {p[1]} ball parts", 3.0)
+        
+        say(fh, f"Now I will get you the top plate. Meanawhile please mount two {p[1]} ball parts.", 3.0)
+        time.sleep(6)
+        say(fh, f"When finished with the two {p[1]} ball parts apply the stickers to the box according to the guide.", 3.0)
+        time.sleep(35)
+        # Wait until movement is finished
         say(fh, "Say ok when you are done!", 3.0)
         gesture(fh, "Smile")
         look(fh, holder, offset)
@@ -221,50 +240,45 @@ def main():
         look(fh, human, offset)
         set_led_color_name(fh, "none")
 
-        # Top Part
-        say(fh, f"I bring you a {p[2]} body part")
-        set_led_color_name(fh, p[2])
-        execute_movement(robot, pos_pick_top_h_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_top_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_top)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_top_h)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_body_app)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_top_h)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_top)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_top_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_place_top_rem_go)
-        time.sleep(0.1)
-        execute_movement(robot, pos_pick_body_app)
-        time.sleep(0.1)
-        execute_movement(robot, home_go)
-        time.sleep(0.1)
+        # Wait until movement is finished
+        while robot_is_moving:
+            time.sleep(0.1)
         
-        
+
+        say(fh, f"Careful, I will now put the topplate on the remote control.", 3.0)
+        positions = [pos_place_top_h, pos_place_top, pos_place_top_go]
+        start_robot_movement(robot, positions)
         look(fh, holder, offset)
+
+        # Wait until movement is finished
+        while robot_is_moving:
+            time.sleep(0.1)
+
+        
+       
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
-        #time.sleep(2.0)
+
+        positions = [pos_place_top_rem_go, pos_pick_body_app, home_go]
+        start_robot_movement(robot, positions)
+        
+      
 
         # Mount screws
         look(fh, holder, offset)
-        say(fh, f"Screw down the {p[2]} top with four screws", 4.0)
-        say(fh, "Say ok when done!", 2.0)
+        say(fh, f"Screw down the {p[2]} top with two screws", 4.0)
+        say(fh, "Say ok when you are done!", 2.0)
         look(fh, holder, offset)
         gesture(fh, "Smile")
         listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
         look(fh, human, offset)
-        say(fh, "Great job!")
+        say(fh, "Great job, we are almoust done!")
         gesture(fh, "Smile")
         set_led_color_name(fh, "none")
         
+        # Wait until movement is finished
+        while robot_is_moving:
+            time.sleep(0.1)
 
         # Knob Part
         #time.sleep(1.0)
@@ -274,7 +288,7 @@ def main():
         say(fh, "Say ok when finished!", 2.5)
         look(fh, holder, offset)
         gesture(fh, "BigSmile")
-        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay"], 2.2, is_print=True)
+        listen_for_and_retry_silent(fh, ["ok", "okay", "OK", "Ok", "Okay", "next"], 2.2, is_print=True)
         look(fh, human, offset)
         set_led_color_name(fh, "none")
 
@@ -300,7 +314,8 @@ def main():
         # Humans puts finished controller in bin for finished controllers
         gesture(fh, "BigSmile")
         time.sleep(1.0)
-        say(fh, f"Well done {human_name}! Please take the controller and move it to the finished bin!", 2.0)
+        say(fh, f"Well done {human_name}! Please take the controller and put it into the box. Then close the box and put it aside.", 2.0)
+        time.sleep(10.0)
         gesture(fh, "BigSmile")
         look(fh, finished_bin, offset)
         time.sleep(3)
